@@ -1,0 +1,31 @@
+# Downloaded toolchains, libraries and build caches
+/.tools/
+**/.lake/
+/.publication/
+
+# Local editor and operating-system files
+.DS_Store
+__pycache__/
+*.pyc
+.vscode/
+.idea/
+
+# Credentials and local environment files
+.env
+.env.*
+*.pem
+*.key
+
+# LaTeX intermediates (verification logs under verifica/ are retained)
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+/paper/*.log
+/ricerca/*.log

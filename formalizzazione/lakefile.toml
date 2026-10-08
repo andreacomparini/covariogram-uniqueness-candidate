@@ -1,0 +1,13 @@
+name = "covariogram_check"
+version = "0.1.0"
+defaultTargets = ["CovariogramCheck"]
+
+[leanOptions]
+autoImplicit = false
+
+[[require]]
+name = "mathlib"
+path = "../.tools/mathlib4"
+
+[[lean_lib]]
+name = "CovariogramCheck"

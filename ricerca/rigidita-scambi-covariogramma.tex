@@ -1,0 +1,1554 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[italian]{babel}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=26mm]{geometry}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue,citecolor=blue]{hyperref}
+\newtheorem{theorem}{Teorema}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollario}
+\newtheorem{proposition}[theorem]{Proposizione}
+\theoremstyle{remark}
+\newtheorem*{remark}{Osservazione}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Sph}{\mathbb S^2}
+\newcommand{\ind}{\mathbf 1}
+\newcommand{\vol}{\operatorname{Vol}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\tr}{\operatorname{tr}}
+\title{Covariogramma in $\R^3$:\\proposta di unicità con regolarità del primo corpo}
+\author{Quaderno di lavoro --- deduzioni e verifiche della sessione}
+\date{9 ottobre 2026}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Si presenta una proposta di dimostrazione dell'unicità del covariogramma
+per un corpo $K\in C^9_+$ in $\R^3$, confrontato con un corpo convesso
+$L$ arbitrario, modulo traslazioni e riflessioni centrali. È il caso
+segnalato come aperto da Bianchi dopo il suo teorema per due corpi
+regolari. La proposta combina due passaggi: ricavare quasi ovunque
+le coppie di densità di area del concorrente mediante il supporto
+$C^{1,1}$ e gli integrali di Laplace; ordinare globalmente tali coppie
+mediante i rami analitici di zeri descritti da Bianchi e la
+fattorizzazione di Hadamard. Per il caso $C^9_+$ la dimostrazione è
+indipendente dagli sviluppi accessori che abbassano la regolarità.
+Il quaderno conserva inoltre criteri di bilanciamento, esempi di scambi
+locali e una condizione di Dini sulle sezioni. La proposta principale
+è accompagnata dalle dimostrazioni dei due passaggi e da controlli
+dei limiti; non è presentata come un risultato già pubblicato o
+convalidato esternamente. Il problema per un primo corpo convesso
+arbitrario non viene risolto.
+\end{abstract}
+
+\section{Ambito e fatti esterni utilizzati}
+\paragraph{Obiettivo aggiornato su indicazione dell'utente.}
+È ora sufficiente risolvere un caso ancora aperto imponendo regolarità
+alla frontiera. Il primo obiettivo preciso è quindi il seguente:
+\begin{equation}\label{eq:target}
+K\in C^9_+,\quad L\text{ corpo convesso in }\R^3,\quad g_K=g_L
+\quad\Longrightarrow\quad L=v+K\text{ oppure }L=v-K.
+\end{equation}
+Qui non si impone alcuna regolarità a $L$. Questo distingue il problema
+dal risultato già noto per due corpi $C^9_+$: \cite[Teorema 3.25 e
+paragrafo immediatamente successivo, p.~23 del manoscritto]{B23}
+indica esplicitamente come aperta la determinazione fra tutti i corpi
+convessi. Le ricerche bibliografiche aggiornate al 9 ottobre 2026 non
+hanno individuato una risoluzione successiva di questo passaggio;
+questa ricerca non è una certificazione esaustiva della novità.
+La proposta della Sezione \ref{sec:transport} mira a
+\eqref{eq:target}, e anzi a una regolarità inferiore. La sua verifica
+matematica rimane distinta dall'accertamento bibliografico.
+Il 9 ottobre l'utente ha confermato che la dimostrazione di questo
+preciso caso aperto costituisce il traguardo conclusivo della ricerca.
+Le estensioni a regolarità inferiore presenti nel quaderno sono
+sviluppi accessori e non sono necessarie a tale traguardo.
+
+\paragraph{Versione consolidata per il riesame.}
+Su richiesta dell'utente, questa versione registra la catena completa
+della dimostrazione candidata di \eqref{eq:target}, con i passaggi
+geometrici e analitici sviluppati nel testo e i risultati esterni
+identificati. Nei controlli interni svolti non è stata individuata
+una lacuna nella catena principale. Questo giudizio non equivale a
+una verifica indipendente né a una certificazione della novità.
+La registrazione del documento è stata chiusa per consentire
+all'utente di rifare il punto. Su successiva richiesta è stato
+avviato il controllo formale parziale descritto di seguito.
+
+\paragraph{Stato del controllo Lean, 9 ottobre 2026.}
+Sono stati formalizzati e controllati dal kernel 33 lemmi di supporto
+e deduzioni condizionali, senza lacune ammesse o assiomi matematici
+aggiunti. Il teorema \eqref{eq:target} non è ancora formalizzato né
+certificato. In particolare, le identità geometriche e spettrali
+assunte in alcuni lemmi Lean non sono ancora ricavate formalmente
+dall'uguaglianza dei covariogrammi. La Sezione \ref{sec:leancheck}
+specifica il perimetro del controllo; il codice e i registri sono
+nella cartella \texttt{formalizzazione} del progetto.
+
+\paragraph{Percorso breve per l'obiettivo attuale.}
+Il lettore interessato a \eqref{eq:target} può seguire il Lemma
+\ref{lem:roughcompetitor}, che recupera le coppie di densità di area
+per un concorrente arbitrario; il Lemma \ref{lem:mean}, che ne rende
+globale l'ordinamento; e il Corollario \ref{cor:targetC9}, che combina
+questi passaggi con gli zeri descritti in \cite{B16} e l'unicità di
+Minkowski. Il criterio di Dini serve all'estensione a regolarità
+inferiore. Il testo contiene una proposta di dimostrazione di questa
+catena di implicazioni; non è presentato come un teorema già
+pubblicato o sottoposto a una revisione esterna.
+
+Un corpo convesso è compatto e ha interno non vuoto. Il suo covariogramma è
+\[
+g_K(x)=\int_{\R^3}\ind_K(y)\ind_K(y-x)\,dy.
+\]
+Traslazioni e riflessioni centrali non lo modificano. La classe $C^2_+$
+consiste di corpi con bordo $C^2$ e curvatura gaussiana positiva.
+Per $u\in\Sph$, poniamo
+\[
+f_K(u)=\frac1{\kappa_K(u)},\qquad dS_K(u)=f_K(u)\,d\sigma(u),
+\]
+dove la curvatura è valutata nel punto con normale esterna $u$.
+
+I fatti esterni centrali sono i seguenti.
+\begin{enumerate}
+\item Per corpi $C^2_+$, il covariogramma determina la coppia non ordinata
+      $\{f_K(u),f_K(-u)\}$ per ogni $u$; si veda \cite[Proposizione 3.1]{B16}.
+\item La misura di area determina un corpo convesso a meno di traslazione
+      (unicità di Minkowski). Inoltre
+      \begin{equation}\label{eq:balance}
+      \int_{\Sph}u f_K(u)\,d\sigma(u)=0.
+      \end{equation}
+      Quest'ultima identità segue direttamente dal teorema della divergenza
+      applicato a ogni campo vettoriale costante.
+\end{enumerate}
+Per il primo fatto basta conoscere il covariogramma vicino all'origine e ai
+punti di contatto sul bordo di $K-K$. Il criterio della prossima sezione usa
+solo la coppia non ordinata e \eqref{eq:balance}, non ulteriori valori interni.
+
+\section{Un criterio di unicità mediante bilanciamento}
+Definiamo la funzione dispari continua
+\[
+d(u)=f_K(u)-f_K(-u),\qquad U_+=\{u:d(u)>0\}.
+\]
+Supponiamo inizialmente che $U_+$ abbia un numero finito $m\geq1$ di
+componenti connesse $C_1,\ldots,C_m$, e definiamo
+\begin{equation}\label{eq:vi}
+v_i=\int_{C_i}u\,d(u)\,d\sigma(u)\in\R^3.
+\end{equation}
+Le componenti di $U_-=\{d<0\}$ sono $-C_i$.
+
+\begin{lemma}\label{lem:selection}
+Se $K,L\in C^2_+$ e $g_K=g_L$, esiste un sottoinsieme
+$I\subseteq\{1,\ldots,m\}$ tale che
+\[
+f_L(u)=
+\begin{cases}
+f_K(-u),&u\in\displaystyle\bigcup_{i\in I}(C_i\cup(-C_i)),\\
+f_K(u),&\text{altrove}.
+\end{cases}
+\]
+Necessariamente
+\begin{equation}\label{eq:zerosum}
+\sum_{i\in I}v_i=0,\qquad \sum_{i=1}^m v_i=0.
+\end{equation}
+\end{lemma}
+\begin{proof}
+Su ciascun $C_i$ i due valori $f_K(u),f_K(-u)$ sono distinti. La funzione
+\[
+\frac{f_L(u)-f_K(-u)}{f_K(u)-f_K(-u)}
+\]
+è continua e assume solo i valori $0,1$; è quindi costante. La coppia non
+ordinata forza la scelta corrispondente su $-C_i$. Su $\{d=0\}$ non vi è
+ambiguità. Posto $V=\bigcup_{i\in I}(C_i\cup(-C_i))$, abbiamo
+$f_L-f_K=-d\ind_V$. Per la disparità di $d$,
+\[
+\int_{-C_i}u d(u)\,d\sigma(u)=\int_{C_i}u d(u)\,d\sigma(u)=v_i.
+\]
+Sottraendo le due identità \eqref{eq:balance} otteniamo
+$0=-2\sum_{i\in I}v_i$. Infine
+\[
+2\sum_i v_i=\int_{\Sph}u d(u)\,d\sigma(u)
+=2\int_{\Sph}u f_K(u)\,d\sigma(u)=0.
+\]
+\end{proof}
+
+\begin{theorem}[Criterio di bilanciamento]\label{thm:balance}
+Sia $K\in C^2_+$, con le componenti e i vettori di \eqref{eq:vi}.
+Se nessun sottoinsieme proprio non vuoto degli indici ha somma vettoriale
+nulla, allora per ogni $L\in C^2_+$
+\[
+g_L=g_K\quad\Longrightarrow\quad L=a+K\ \text{oppure}\ L=a-K.
+\]
+\end{theorem}
+\begin{proof}
+Il lemma impone $I=\varnothing$ oppure $I=\{1,\ldots,m\}$.
+Pertanto $S_L=S_K$ oppure $S_L=S_{-K}$. L'unicità di Minkowski conclude.
+\end{proof}
+
+\begin{corollary}\label{cor:smallm}
+Il criterio vale nei seguenti casi:
+\begin{enumerate}
+\item $m=1$;
+\item $m=2$ e $v_1\ne0$ (allora $v_2=-v_1$);
+\item $m=3$ e tutti i $v_i$ sono non nulli.
+\end{enumerate}
+Nel caso $m=2$, è sufficiente che una componente sia contenuta in un
+emisfero aperto. Nel caso $m=3$, è sufficiente che ciascuna componente
+sia contenuta in un emisfero aperto, eventualmente diverso.
+\end{corollary}
+\begin{proof}
+Per $m=3$, una somma nulla di due vettori equivale all'annullarsi del terzo.
+Se $C_i\subset\{u:a\cdot u>0\}$, allora
+$a\cdot v_i=\int_{C_i}(a\cdot u)d(u)\,d\sigma(u)>0$.
+\end{proof}
+
+Se $d\equiv0$, non ci sono componenti e la coppia non ordinata impone
+direttamente $f_L=f_K$. Anche questo caso dà unicità.
+Se esistono $b$ sottoinsiemi bilanciati, compresi quello vuoto e quello
+totale, il numero dei possibili concorrenti $C^2_+$, modulo traslazioni e
+riflessioni, è al più $b/2$: ciascuna scelta determina al più una misura
+di area e quindi al più un corpo modulo traslazione. Non si afferma che
+ogni scelta bilanciata dia lo stesso covariogramma, lo stesso corpo
+differenza, o un corpo $C^2_+$.
+
+\subsection*{Una famiglia esplicita a due componenti}
+Sia $z=u_3$, $P_3(z)=(5z^3-3z)/2$ e
+\[
+h_K(u)=1-\eta P_3(u_3),\qquad 0<\eta<1/5.
+\]
+Per una funzione $h$ sulla sfera poniamo $Q(h)=\nabla^2_{\Sph}h+hI$.
+Gli autovalori di $Q(P_3)$, nelle direzioni meridiana e parallela, sono
+\[
+15z-20z^3,\qquad -5z^3.
+\]
+Entrambi sono compresi tra $-5$ e $5$. Quindi $Q(h_K)>0$ e $h_K$ è
+la funzione di supporto di un corpo $C^\infty_+$. In dimensione tre,
+$f_K=\det Q(h_K)$; usando $\tr Q(P_3)=-10P_3$ otteniamo esattamente
+\[
+d(u)=20\eta P_3(u_3).
+\]
+Con $a=\sqrt{3/5}$, le due componenti positive sono
+$C_1=\{z>a\}$ e $C_2=\{-a<z<0\}$. Per simmetria assiale,
+\[
+v_1=40\pi\eta\left(\int_a^1 zP_3(z)\,dz\right)e_3
+=8\pi\eta(3/5)^{3/2}e_3\ne0.
+\]
+Il Teorema \ref{thm:balance} determina quindi questo $K$ fra tutti i
+concorrenti $C^2_+$, senza imporre loro regolarità $C^9$.
+L'esempio verifica che il criterio non è vuoto; non ne stabilisce la novità.
+
+\section{Una rigidità esatta della parte pari}
+Per una funzione reale limitata e a supporto compatto $f$ definiamo
+\[
+\widetilde f(x)=f(-x),\quad E_f=(f+\widetilde f)/2,\quad
+O_f=(f-\widetilde f)/2.
+\]
+La commutatività della convoluzione dà l'identità
+\begin{equation}\label{eq:eo}
+f*\widetilde f=E_f*E_f-O_f*O_f.
+\end{equation}
+
+\begin{lemma}[Assenza di divisori dello zero]\label{lem:zero}
+Se $a,b\in L^1(\R^n)$ hanno supporto compatto e $a*b=0$, allora
+$a=0$ oppure $b=0$, quasi ovunque.
+\end{lemma}
+\begin{proof}
+Le trasformate di Fourier sono reali analitiche su $\R^n$ e
+$\widehat a\widehat b=0$. Se $a\ne0$, l'iniettività di Fourier e la
+continuità forniscono un aperto non vuoto dove $\widehat a\ne0$.
+Lì $\widehat b=0$; l'unicità del prolungamento reale analitico dà
+$\widehat b=0$ su tutto $\R^n$. Quindi $b=0$.
+\end{proof}
+
+\begin{theorem}\label{thm:even}
+Siano $K,L\subset\R^n$ misurabili e limitati. Se
+\[
+g_K=g_L,\qquad
+\ind_K(x)+\ind_K(-x)=\ind_L(x)+\ind_L(-x)\quad\text{q.o.},
+\]
+allora $K=L$ oppure $K=-L$ a meno di insiemi nulli.
+Per corpi convessi l'uguaglianza è esatta.
+\end{theorem}
+\begin{proof}
+Le parti pari sono uguali. Da \eqref{eq:eo},
+\[
+0=O_K*O_K-O_L*O_L=(O_K-O_L)*(O_K+O_L).
+\]
+Il Lemma \ref{lem:zero} impone $O_K=O_L$ oppure $O_K=-O_L$.
+Nel primo caso le indicatrici coincidono; nel secondo sono riflesse.
+Due corpi convessi con uguali indicatrici quasi ovunque coincidono, perché
+ciascuno è la chiusura del proprio interno.
+\end{proof}
+
+Il centro può essere qualsiasi punto fissato, dopo una traslazione.
+Per corpi contenenti l'origine, l'ipotesi sulle parti pari equivale a
+conoscere le coppie radiali non ordinate
+$\{\rho_K(u),\rho_K(-u)\}$, oppure sia $K\cup(-K)$ sia $K\cap(-K)$.
+\emph{Non} equivale a conoscere $K-K$, che determina invece la parte pari
+della funzione di supporto.
+
+Se due insiemi differiscono per la riflessione di un gruppo di porzioni
+attorno al medesimo centro, la loro parte pari può rimanere identica.
+In tal caso il teorema esclude ogni scambio non globale con covariogramma
+invariato. In particolare, se le indicatrici sono
+\[
+\ind_K=E+A+B,\qquad \ind_L=E+A-B,
+\]
+con $E$ pari, $A,B$ dispari e non nulli, allora
+\begin{equation}\label{eq:cross}
+g_K-g_L=-4A*B\ne0.
+\end{equation}
+Questa identità individua esattamente il termine di interazione che
+rileva lo scambio parziale. La convessità non è necessaria al teorema.
+
+\section{Due corpi convessi espliciti e un punto che li distingue}
+Costruiamo una famiglia con regolarità finita e verifichiamo tutte le
+disuguaglianze. Poniamo
+\[
+c=\frac9{10},\qquad d_0=\frac{19}{20},\qquad 0<\varepsilon\le10^{-5},
+\]
+e definiamo la funzione $C^3$
+\[
+\psi(t)=
+\begin{cases}
+0,&t\le0,\\
+35t^4-84t^5+70t^6-20t^7,&0<t<1,\\
+1,&t\ge1.
+\end{cases}
+\]
+Essa è monotona, poiché $\psi'(t)=140t^3(1-t)^3$ su $(0,1)$.
+Siano
+\[
+\beta(s)=\psi\left(\frac{s-c}{d_0-c}\right),\qquad
+\phi_i(u)=\beta(u_i)-\beta(-u_i),\quad i=1,2.
+\]
+Le quattro calotte $\{\pm u_i>c\}$ sono disgiunte perché $2c^2>1$.
+Definiamo le funzioni radiali
+\[
+r_+(u)=1+\varepsilon(\phi_1(u)+\phi_2(u)),\qquad
+r_-(u)=1+\varepsilon(\phi_1(u)-\phi_2(u)),
+\]
+e i corpi stellati $K_\pm=\{tu:u\in\Sph,\ 0\le t\le r_\pm(u)\}$.
+
+\subsection*{Verifica della convessità}
+Se $r>0$ è $C^2$, un criterio sufficiente per la convessità stretta del
+corpo radiale, con curvatura positiva, è la positività di
+\begin{equation}\label{eq:radial}
+M_r=r^2 I+2\nabla r\otimes\nabla r-r\nabla^2r.
+\end{equation}
+Infatti il gauge omogeneo $F(x)=|x|/r(x/|x|)$ ha Hessiana tangenziale
+proporzionale a
+$Q(1/r)=M_r/r^3$. La positività rende $F$ convesso e $\{F\le1\}$ convesso;
+la stessa matrice dà la seconda forma fondamentale del bordo, a meno di
+un fattore positivo.
+
+Su $(0,1)$ valgono $|\psi'|\le35/16$ e $|\psi''|\le105/4$.
+Dato che $|\nabla u_i|\le1$ e $\nabla^2u_i=-u_i I$, per
+$\Phi=\phi_1\pm\phi_2$ otteniamo
+\[
+|\Phi|\le1,\quad |\nabla\Phi|\le G=\frac{175}{4},\quad
+\|\nabla^2\Phi\|\le H=\frac{42175}{4}.
+\]
+Si usa il fatto che in ogni punto è attiva al più una calotta, e le
+derivate fino all'ordine tre si raccordano. Quindi
+\[
+M_{r_\pm}\succeq
+\left((1-\varepsilon)^2-(1+\varepsilon)\varepsilon H\right)I
+\succeq\frac{35781657829}{40000000000}I>0.
+\]
+I due corpi appartengono a $C^3_+$; per questa scelta di $\psi$ non si
+assume regolarità $C^9$. Entrambi contengono $B_{1-\varepsilon}$.
+
+\subsection*{La differenza dei covariogrammi}
+Definiamo i gusci aperti
+\[
+T_i=\{tu:u_i>c,\ 1-\varepsilon\beta(u_i)<t<1+\varepsilon\beta(u_i)\},
+\quad a_i=\ind_{T_i},\quad A_i=(a_i-\widetilde a_i)/2.
+\]
+Le indicatrici di $K_+,K_-$ hanno la stessa parte pari $E$ e, quasi ovunque,
+\[
+\ind_{K_+}=E+A_1+A_2,\qquad
+\ind_{K_-}=E+A_1-A_2.
+\]
+Pertanto
+\begin{equation}\label{eq:explicitdiff}
+g_{K_+}-g_{K_-}
+=-a_1*a_2-\widetilde a_1*\widetilde a_2
+ +a_1*\widetilde a_2+\widetilde a_1*a_2.
+\end{equation}
+
+\begin{proposition}[Una traslazione esplicita]\label{prop:witness}
+Per $x_*=e_1+e_2=(1,1,0)$ vale
+\[
+g_{K_+}(x_*)-g_{K_-}(x_*)\le-\frac\pi6\varepsilon^3<0.
+\]
+\end{proposition}
+\begin{proof}
+Scriviamo $s=\sqrt{1-c^2}$. Un punto di $T_1$ ha prima coordinata
+maggiore di $(1-\varepsilon)c$ e seconda coordinata di modulo al più
+$(1+\varepsilon)s$; per $T_2$ scambiamo gli indici.
+Poiché
+\[
+(1+\varepsilon)s-(1-\varepsilon)c<0,
+\]
+$x_*$ non appartiene a $T_1-T_2$, $-T_1+T_2$ o $-T_1-T_2$.
+Gli ultimi tre termini pertinenti in \eqref{eq:explicitdiff} sono quindi
+nulli in $x_*$, e resta
+\[
+g_{K_+}(x_*)-g_{K_-}(x_*)=-\vol\bigl(T_1\cap(x_*-T_2)\bigr).
+\]
+Poniamo $\delta=\varepsilon/2$. Se $y\in B_\delta(e_1)$, allora
+$1-\delta<|y|<1+\delta$ e
+\[
+\frac{y_1}{|y|}\ge\frac{1-\delta}{1+\delta}>d_0.
+\]
+Quindi $\beta(y_1/|y|)=1$ e $y\in T_1$. Analogamente
+$x_*-y\in B_\delta(e_2)\subset T_2$.
+L'intersezione contiene $B_\delta(e_1)$, di volume
+$4\pi\delta^3/3=\pi\varepsilon^3/6$.
+\end{proof}
+
+\subsection*{Perché i dati vicini agli estremi non vedono lo scambio}
+Sia $\theta=\arccos c<\pi/4$. Le direzioni di due vettori appartenenti
+rispettivamente a $\pm T_1,\pm T_2$ formano un angolo nell'intervallo
+$[\pi/2-2\theta,\pi/2+2\theta]$. Le loro lunghezze differiscono da uno
+al più di $\varepsilon$. Ne segue che ogni somma appartiene alla corona
+\[
+\rho_\varepsilon\le |x|\le R_\varepsilon,
+\quad
+\rho_\varepsilon=2\sin(\pi/4-\theta)-2\varepsilon,
+\quad
+R_\varepsilon=2\cos(\pi/4-\theta)+2\varepsilon.
+\]
+Per \eqref{eq:explicitdiff},
+\begin{equation}\label{eq:annulus}
+g_{K_+}(x)=g_{K_-}(x)
+\quad\text{se }|x|<\rho_\varepsilon\ \text{oppure }|x|>R_\varepsilon.
+\end{equation}
+Uniformemente per $0<\varepsilon\le10^{-5}$,
+\[
+\rho_\varepsilon>0.6563,\qquad R_\varepsilon<1.8893
+<1.99998\le2(1-\varepsilon).
+\]
+Questi decimali illustrano disuguaglianze certificate anche con stime
+razionali nel file di verifica allegato.
+
+Poiché $K_\pm$ contengono $B_{1-\varepsilon}$, i due covariogrammi sono
+positivi su $B_{2(1-\varepsilon)}$. Fuori da questa palla coincidono per
+\eqref{eq:annulus}, dunque hanno lo stesso supporto
+$D=K_+-K_+=K_--K_-$. Il bordo di $D$ è contenuto in
+$\{|x|\ge2(1-\varepsilon)\}$, dove i due covariogrammi coincidono in un
+intorno. Coincidono anche vicino all'origine, ma sono distinti in $x_*$.
+La stretta disuguaglianza esclude che i corpi siano traslati o riflessi
+centralmente l'uno dell'altro.
+
+\begin{remark}
+L'esistenza di corpi $C^2_+$ non equivalenti con covariogrammi uguali
+vicino a $\{0\}\cup\partial D$ è già affermata in
+\cite[Teorema 6, ultima parte]{AB07}. La costruzione qui serve a rendere
+espliciti una famiglia a regolarità finita, il termine che separa i dati,
+il punto $x_*$ e una stima stretta. Non è un controesempio all'unicità
+dal covariogramma completo.
+\end{remark}
+
+\section{Una ridondanza specifica della dimensione tre}
+Il volume non fornisce un vincolo indipendente una volta noti sia il
+corpo differenza sia le aree di tutte le proiezioni. Più precisamente,
+per ogni corpo convesso in $\R^3$, con $D=K-K$,
+\begin{equation}\label{eq:volume}
+\vol(K)=\frac14\left(
+\int_{\Sph}h_D(u)\,d(S_K+S_{-K})(u)-\vol(D)\right).
+\end{equation}
+Per verificarlo, scriviamo $V=\vol(K)$ e $M=V(K,K,-K)$, usando i volumi
+misti. La riflessione e la simmetria degli argomenti danno
+$V(K,-K,-K)=M$, quindi $\vol(D)=2V+6M$. Inoltre, essendo $h_D$ pari,
+\[
+\int h_D\,d(S_K+S_{-K})=2\int h_D\,dS_K
+=6V(K,K,D)=6V+6M.
+\]
+La sottrazione dà \eqref{eq:volume}.
+Le aree delle proiezioni determinano $S_K+S_{-K}$ mediante
+l'iniettività della trasformata coseno sulle misure pari. Questa
+osservazione non produce unicità, ma evita di contare il volume come
+un'informazione ulteriore dopo questi dati.
+
+\section{Rami analitici di zeri sotto una condizione sulle sezioni}
+\label{sec:zeros}
+L'idea di utilizzare l'analiticità dei rami di zeri per rendere globale
+la scelta delle curvature è di \cite{B16}. Qui ne isoliamo una condizione
+sufficiente in dimensione tre: occorrono soltanto zeri in una striscia
+orizzontale fissata. Non si richiede una classificazione di tutti gli zeri.
+La dimostrazione seguente e il successivo criterio di Dini sono sviluppi
+del quaderno, ancora privi di revisione indipendente.
+
+Per $K\in C^2_+$ poniamo
+\[
+\alpha_K(u)=-h_K(-u),\quad \beta_K(u)=h_K(u),\quad
+w_K=\beta_K-\alpha_K,
+\qquad A_K(u,t)=\mathcal H^2(K\cap\{x:x\cdot u=t\}).
+\]
+L'area è nulla agli estremi. Le sue derivate unilaterali sono
+\begin{equation}\label{eq:slopes}
+a_K(u)=\partial_t A_K(u,\alpha_K(u)+)
+=\frac{2\pi}{\sqrt{\kappa_K(-u)}},\qquad
+-\partial_t A_K(u,\beta_K(u)-)=b_K(u)
+=\frac{2\pi}{\sqrt{\kappa_K(u)}}.
+\end{equation}
+Queste formule seguono anche dal calcolo locale della prossima sezione.
+
+\paragraph{Condizioni sulle sezioni.}
+Diremo che vale (S) se, per ogni $u$, la funzione
+$\partial_t A_K(u,\cdot)$ è assolutamente continua sul proprio intervallo
+chiuso e la sua derivata seconda interna è integrabile. Definiamo
+\[
+T_{K,u}(t)=\ind_{(\alpha_K(u),\beta_K(u))}(t)\,
+\partial_t^2 A_K(u,t).
+\]
+Gli atomi dovuti alle derivate agli estremi \emph{non} fanno parte di
+$T_{K,u}$. Diremo che vale (U) se vale (S) e la famiglia
+$\{T_{K,u}:u\in\Sph\}$ è relativamente compatta in $L^1(\R)$.
+
+\begin{lemma}[Asintotica in una striscia]\label{lem:strip}
+Sia $K\in C^2_+$ e valga (U). Per
+$\mathcal F_K(z)=\int_K e^{iz\cdot x}\,dx$ si ha
+\begin{equation}\label{eq:strip}
+\zeta^2\mathcal F_K(\zeta u)=
+-a_K(u)e^{i\alpha_K(u)\zeta}-b_K(u)e^{i\beta_K(u)\zeta}+o(1)
+\end{equation}
+quando $\operatorname{Re}\zeta\to+\infty$, uniformemente in $u\in\Sph$
+e in ogni striscia $|\operatorname{Im}\zeta|\leq M$ fissata.
+Sotto la sola condizione (S), la stessa conclusione vale per ogni $u$
+fissato, uniformemente nella parte immaginaria limitata.
+\end{lemma}
+\begin{proof}
+Fubini e due integrazioni per parti, giustificate da (S), danno l'identità
+esatta
+\begin{equation}\label{eq:twoparts}
+\zeta^2\mathcal F_K(\zeta u)=
+-a_K(u)e^{i\alpha_K(u)\zeta}-b_K(u)e^{i\beta_K(u)\zeta}
+-\int_\R T_{K,u}(t)e^{it\zeta}\,dt.
+\end{equation}
+Tutti i supporti sono contenuti in un intervallo comune limitato.
+La chiusura della famiglia
+$T_{K,u}(t)e^{-\sigma t}$, $u\in\Sph$, $|\sigma|\leq M$, è compatta
+in $L^1$: è l'immagine continua di un prodotto di due compatti.
+Il lemma di Riemann--Lebesgue è uniforme su un compatto di $L^1$,
+come si verifica coprendolo con una rete finita di palle $L^1$ e usando
+$|\widehat f|\leq\|f\|_1$. Il resto in \eqref{eq:twoparts} tende dunque
+uniformemente a zero. Per $u$ fissato basta il compatto ottenuto variando
+soltanto $\sigma$.
+\end{proof}
+
+\begin{lemma}[Un ramo globale per ogni indice grande]\label{lem:branches}
+Sotto le ipotesi uniformi del Lemma \ref{lem:strip}, esiste $m_0$ tale che
+per ogni intero $m\geq m_0$ esiste una funzione reale analitica
+$z_{m,K}:\Sph\to\mathbb C$ con
+$\mathcal F_K(z_{m,K}(u)u)=0$ e
+\begin{equation}\label{eq:rootasymptotic}
+z_{m,K}(u)=\frac{(2m+1)\pi}{w_K(u)}+i\gamma_K(u)+o(1),\qquad
+\gamma_K(u)=\frac{\log(b_K(u)/a_K(u))}{w_K(u)}.
+\end{equation}
+Il resto è uniforme in $u$, e ciascuno zero è semplice come zero nella
+variabile scalare $\zeta$.
+\end{lemma}
+\begin{proof}
+Scriviamo $a,b,\alpha,\beta,w$ senza pedice. Gli zeri del modello
+$H_u(\zeta)=a e^{i\alpha\zeta}+b e^{i\beta\zeta}$ sono
+\[
+\lambda_m(u)=\frac{(2m+1)\pi}{w(u)}+i\gamma(u),\qquad m\in\mathbb Z.
+\]
+Fissiamo $0<\delta<\pi/(4\max w)$. Sulla circonferenza
+$\zeta=\lambda_m(u)+\xi$, $|\xi|=\delta$, vale
+\[
+|H_u(\zeta)|=|a e^{i\alpha\zeta}|\,|1-e^{iw\xi}|\geq c_\delta>0.
+\]
+La costante è uniforme: $a,w$ hanno minimi positivi, $\alpha,\gamma$
+sono limitate e il secondo fattore non si annulla sul compatto indicato.
+Tutte le circonferenze stanno in una striscia fissata, mentre le loro
+parti reali tendono uniformemente a infinito con $m$.
+Per \eqref{eq:strip}, il teorema di Rouché applicato a
+$\zeta^2\mathcal F_K(\zeta u)$ dà esattamente uno zero, contato con
+molteplicità, nel disco $B(\lambda_m(u),\delta)$. Esso è quindi semplice;
+il disco non contiene $0$ quando $m$ è grande.
+
+La funzione $(u,\zeta)\mapsto\mathcal F_K(\zeta u)$ è reale analitica
+in $u$, in ogni carta analitica della sfera, e olomorfa in $\zeta$.
+Il teorema della funzione implicita, insieme alla semplicità dello zero,
+fornisce una scelta reale analitica locale. La continuità del centro
+$\lambda_m(u)$ e l'unicità dello zero nel disco identificano queste
+scelte nei dintorni e permettono di incollarle sulla sfera.
+Ripetendo Rouché con ogni raggio $0<\delta'<\delta$ si ottiene, per $m$
+sufficientemente grande, $|z_{m,K}-\lambda_m|<\delta'$ uniformemente;
+questo prova il resto $o(1)$.
+\end{proof}
+
+\begin{theorem}[Unicità sotto le condizioni sulle sezioni]\label{thm:sectionunique}
+Siano $K,L\in C^2_+$ in $\R^3$. Supponiamo (U) per $K$ e (S) per $L$.
+Allora
+\[
+g_K=g_L\quad\Longrightarrow\quad L=v+K\quad\text{oppure}\quad L=v-K.
+\]
+\end{theorem}
+\begin{proof}
+L'uguaglianza dei supporti dei covariogrammi dà $w_K=w_L=w$.
+L'identità di convoluzione e la trasformata intera danno, per ogni
+$z\in\mathbb C^3$,
+\[
+\mathcal F_K(z)\mathcal F_K(-z)=\mathcal F_L(z)\mathcal F_L(-z).
+\]
+Per ciascuno dei rami del Lemma \ref{lem:branches}, le funzioni
+\[
+P_m(u)=\mathcal F_L(z_{m,K}(u)u),\qquad
+Q_m(u)=\mathcal F_L(-z_{m,K}(u)u)
+\]
+sono reali analitiche sulla sfera connessa e soddisfano $P_mQ_m=0$.
+Quindi $P_m\equiv0$ oppure $Q_m\equiv0$. Infatti, se $P_m$ non è
+identicamente nulla, è non nulla su un aperto; lì $Q_m=0$, e l'identità
+analitica forza $Q_m=0$ ovunque. Questo passaggio evita di costruire o
+classificare i rami di zeri di $L$.
+
+Almeno una delle due alternative si verifica lungo una successione
+infinita di indici. Se $P_m\equiv0$ lungo tale successione, fissato $u$
+applichiamo \eqref{eq:strip} per $L$ in $\zeta=z_{m,K}(u)$ e dividiamo
+per $e^{i\alpha_L(u)\zeta}$, il cui modulo è limitato inferiormente.
+Poiché
+\[
+e^{iw(u)z_{m,K}(u)}=-e^{-w(u)\gamma_K(u)}+o(1),
+\]
+il limite dà $a_L(u)=b_L(u)e^{-w(u)\gamma_K(u)}$, cioè
+$\gamma_L(u)=\gamma_K(u)$ per ogni $u$.
+Se invece $Q_m\equiv0$ lungo una successione infinita, la realtà
+dell'indicatrice dà
+\[
+\mathcal F_L(-\zeta u)=\overline{\mathcal F_L(\overline\zeta u)}.
+\]
+Applichiamo quindi lo stesso ragionamento agli zeri
+$\overline{z_{m,K}(u)}$ e otteniamo $\gamma_L=-\gamma_K$ su tutta la sfera.
+
+Da \eqref{eq:slopes} segue
+$2w\gamma_K=\log\kappa_K(-u)-\log\kappa_K(u)$, e analogamente per $L$.
+Il covariogramma dà inoltre le coppie non ordinate di curvature,
+come ricordato nella prima sezione. Rapporto ordinato e coppia non
+ordinata impongono dunque $\kappa_L(u)=\kappa_K(u)$ per ogni $u$, oppure
+$\kappa_L(u)=\kappa_K(-u)$ per ogni $u$. Nei punti con curvature
+antipodali uguali le due conclusioni coincidono. L'unicità di Minkowski
+conclude.
+\end{proof}
+
+\section{Verifica geometrica della condizione: Hessiane con modulo di Dini}
+\label{sec:dini}
+Assumiamo che i grafici del bordo nei piani tangenti abbiano, su dischi
+di raggio comune, Hessiane uniformemente positive e un modulo comune
+$\omega$ tale che
+\begin{equation}\label{eq:dini}
+\|D^2\phi(y)-D^2\phi(y')\|\leq\omega(|y-y'|),\qquad
+\int_0^{r_0}\frac{\omega(r)}r\,dr<\infty.
+\end{equation}
+Il modulo può essere preso non decrescente. Questa formulazione rende
+esplicita l'uniformità rispetto al punto di tangenza. In particolare la
+soddisfa ogni corpo $C^{2,\eta}_+$, $0<\eta\leq1$: per compattezza del
+bordo e cambi di coordinate regolari si può prendere $\omega(r)=Cr^\eta$.
+
+\begin{proposition}\label{prop:dini}
+Un corpo $C^2_+$ che soddisfa \eqref{eq:dini} soddisfa (U).
+\end{proposition}
+\begin{proof}
+Vicino al punto di minimo nella direzione $u$, trasliamo il punto
+all'origine e scriviamo il bordo $t=\phi(y)$, con
+$\phi(0)=0$, $\nabla\phi(0)=0$ e $D^2\phi\geq\lambda I>0$.
+Per $s=t-\alpha_K(u)>0$ piccolo, tutta la sezione è la sottolivellare
+$\{y:\phi(y)\leq s\}$. La dimensione tangenziale è due: scrivendo
+$y=r\theta$ con $\theta\in\mathbb S^1$ e
+$\phi(r(s,\theta)\theta)=s$, si ottiene
+\begin{align*}
+A(s)&=\frac12\int_{\mathbb S^1}r(s,\theta)^2\,d\theta,\\
+A'(s)&=\int_{\mathbb S^1}\frac r{\phi_r}\,d\theta,\\
+A''(s)&=\int_{\mathbb S^1}
+\frac{\phi_r-r\phi_{rr}}{\phi_r^3}\,d\theta.
+\end{align*}
+Non si è differenziato il bordo tre volte. Dalle Hessiane uniformemente
+ellittiche, $r\asymp\sqrt{s}$ e $\phi_r\geq\lambda r$.
+Inoltre
+\[
+\phi_r(r\theta)-r\phi_{rr}(r\theta)
+=\int_0^r\bigl(\phi_{rr}(q\theta)-\phi_{rr}(r\theta)\bigr)\,dq,
+\]
+il cui modulo è al più $r\omega(r)$. Ne segue la stima uniforme
+\begin{equation}\label{eq:sectiontail}
+|A''(s)|\leq C\frac{\omega(C\sqrt{s})}{s}.
+\end{equation}
+Il membro destro è integrabile a $0$ grazie a \eqref{eq:dini}.
+Inoltre, se $H=D^2\phi(0)$,
+\[
+\lim_{s\downarrow0}A'(s)
+=\int_{\mathbb S^1}\frac{d\theta}{\theta^TH\theta}
+=\frac{2\pi}{\sqrt{\det H}}.
+\]
+L'ultima identità si ottiene diagonalizzando la matrice positiva $H$.
+Al punto di tangenza $\det H=\kappa_K(-u)$.
+Lo stesso calcolo all'altro estremo dà \eqref{eq:slopes} e una stima
+analoga a \eqref{eq:sectiontail}.
+
+All'interno dell'intervallo delle sezioni, $A''(u,t)$ è congiuntamente
+continua. Per verificarlo localmente, scegliamo un punto interno della
+sezione, un riferimento del piano dipendente regolarmente da $u$ e una
+funzione definente $C^2$ del bordo. I raggi della sezione sono funzioni
+$C^2$ dei parametri per il teorema implicito: la direzione radiale è
+trasversale al bordo, poiché parte da un punto interno di una sezione
+convessa. La formula polare dell'area consente due derivate e dimostra
+la continuità asserita. Queste osservazioni e le code integrabili mostrano
+che $A'$ è assolutamente continua fino agli estremi, cioè (S).
+
+Infine sia $u_j\to u$. Gli estremi delle sezioni convergono. Su ogni
+intervallo strettamente interno la continuità appena provata dà la
+convergenza delle derivate seconde in $L^1$. L'integrale di
+\eqref{eq:sectiontail} su una coda di lunghezza $\delta$ tende a zero
+uniformemente nelle direzioni quando $\delta\downarrow0$; lo stesso
+vale per la coda superiore. Dopo il prolungamento per zero, queste
+stime danno $\|T_{K,u_j}-T_{K,u}\|_1\to0$. La sfera è compatta, quindi
+la sua immagine in $L^1$ è compatta: vale (U).
+\end{proof}
+
+\begin{corollary}[Conclusione nella classe con modulo di Dini]\label{cor:dini}
+Siano $K,L\in C^2_+$ entrambi con l'ipotesi uniforme
+\eqref{eq:dini}. Allora $g_K=g_L$ implica $L=v+K$ oppure $L=v-K$.
+In particolare questa conclusione vale fra corpi $C^{2,\eta}_+$,
+per ogni $0<\eta\leq1$.
+\end{corollary}
+\begin{proof}
+Applichiamo la Proposizione \ref{prop:dini} a entrambi i corpi e quindi
+il Teorema \ref{thm:sectionunique}.
+\end{proof}
+
+\paragraph{Portata e controllo ancora necessario.}
+Il corollario è una deduzione con dimostrazione proposta qui, da
+controllare indipendentemente anche alla luce della letteratura.
+Non conclude il caso di un concorrente convesso arbitrario: l'ipotesi
+sulle sezioni di $L$ è effettivamente usata in \eqref{eq:strip}.
+La sola continuità delle Hessiane non rende integrabile
+$\omega(\sqrt{s})/s$. Né un'approssimazione liscia di $K,L$ conserva
+automaticamente l'uguaglianza dei loro covariogrammi.
+
+\section{Trasportare l'informazione a un concorrente meno regolare}
+\label{sec:transport}
+Il Teorema \ref{thm:sectionunique} usa (S) anche per $L$. Il seguente
+sviluppo tenta di rimuovere questa ipotesi mediante la fattorizzazione
+di Hadamard e un limite sull'asse immaginario. Tutti i passaggi sono
+esplicitati per consentire una revisione indipendente; la portata resta
+limitata all'ipotesi (U) sul primo corpo.
+
+\begin{lemma}[Localizzazione di tutti gli zeri scalari]\label{lem:allzeros}
+Se $K\in C^2_+$ soddisfa (U), esiste $M$ tale che tutti gli zeri di
+$\zeta\mapsto\mathcal F_K(\zeta u)$, per ogni $u$, appartengono alla
+striscia $|\operatorname{Im}\zeta|\leq M$. Inoltre tutti gli zeri con
+parte reale positiva sufficientemente grande sono esattamente i rami
+$z_{m,K}(u)$ del Lemma \ref{lem:branches}.
+\end{lemma}
+\begin{proof}
+Per $\operatorname{Im}\zeta=\tau>0$, dividiamo \eqref{eq:twoparts} per
+$e^{i\alpha\zeta}$. Il termine $a$ è limitato inferiormente, mentre
+\[
+|b e^{iw\zeta}|\leq b e^{-w\tau},\qquad
+\left|\int T_{K,u}(t)e^{i(t-\alpha)\zeta}\,dt\right|
+\leq\int_\alpha^\beta |T_{K,u}(t)|e^{-\tau(t-\alpha)}\,dt.
+\]
+Quest'ultimo integrale tende uniformemente a zero: su
+$[\alpha,\alpha+\delta]$ si usa l'uniforme integrabilità della famiglia
+compatta in $L^1$, e sul resto il fattore $e^{-\tau\delta}$ e il limite
+uniforme delle norme $L^1$. Lo stesso ragionamento all'altro estremo
+esclude gli zeri con parte immaginaria molto negativa.
+
+Nella striscia restante il modello $H_u$ è uniformemente separato da
+zero fuori dai dischi $B(\lambda_m(u),\delta)$. Infatti, dopo aver tolto
+il fattore $e^{i\alpha\zeta}$, l'espressione $a+b e^{iw\zeta}$ dipende
+dalla parte reale solo attraverso una fase periodica; la separazione
+dai suoi zeri dà un minimo positivo su un compatto di parametri.
+L'asintotica uniforme \eqref{eq:strip} esclude gli zeri fuori dai dischi
+per parte reale grande. Rouché ne aveva già contato uno in ogni disco.
+\end{proof}
+
+\paragraph{Ipotesi spettrale (Z).}
+Per separare il caso $C^9_+$ dal criterio sulle sezioni, diremo che
+$K\in C^2_+$ soddisfa (Z) se esiste $m_0$ e, per ogni intero
+$m\geq m_0$, un ramo reale analitico $z_{m,K}:\Sph\to\mathbb C$
+con le seguenti proprietà:
+\begin{enumerate}
+\item Per ogni $u$, gli $z_{m,K}(u)$ sono zeri semplici, distinti,
+      con parte reale positiva, di $\zeta\mapsto\mathcal F_K(\zeta u)$.
+\item Vale \eqref{eq:rootasymptotic}, con resto $o(1)$ uniforme in $u$.
+\item Tutti gli altri zeri scalari con parte reale positiva
+      appartengono a un insieme limitato comune a tutte le direzioni;
+      per ogni direzione sono in numero finito, contati con molteplicità.
+\end{enumerate}
+La simmetria $\mathcal F_K(-\overline\zeta u)=
+\overline{\mathcal F_K(\zeta u)}$ e la positività sull'asse immaginario
+completano la descrizione degli zeri. In particolare essi sono tutti
+in una striscia orizzontale comune. I Lemmi \ref{lem:branches} e
+\ref{lem:allzeros} mostrano che (U) implica (Z). Per $K\in C^9_+$,
+(Z) segue direttamente da \cite[Teoremi 4.1--4.2]{B16}, compresa la
+semplicità verificata nella dimostrazione del Teorema 4.2.
+
+\begin{lemma}[Un solo parametro per le pendenze antipodali]\label{lem:mean}
+Sia $K\in C^2_+$ non centralmente simmetrico e con (Z). Sia $L$ un
+corpo convesso con $g_L=g_K$. Supponiamo che, per quasi ogni $u$, le
+aree di sezione di $L$ soddisfino
+\begin{equation}\label{eq:linearends}
+A_L(u,\alpha_L+s)=a_L(u)s+o(s),\qquad
+A_L(u,\beta_L-s)=b_L(u)s+o(s),\qquad a_L,b_L>0.
+\end{equation}
+Allora esiste un unico numero $c\in[-1,1]$ tale che, quasi ovunque,
+\begin{equation}\label{eq:scalartransport}
+\frac{\log(b_L(u)/a_L(u))}{w(u)}=c\,\gamma_K(u).
+\end{equation}
+\end{lemma}
+\begin{proof}
+La funzione continua $\gamma_K$ non è identicamente nulla: altrimenti
+la misura di area di $K$ sarebbe pari e l'unicità di Minkowski darebbe
+simmetria centrale. Scegliamo una direzione dove $\gamma_K\ne0$.
+Per tutti gli indici grandi i corrispondenti zeri di $K$ sono non reali,
+semplici e distinti dai loro coniugati, per (Z). Nessun loro coniugato
+è un altro zero di $K$ in questa direzione: i rami grandi sono
+separati nelle parti reali, e quelli eccezionali sono limitati.
+Possiamo aumentare $m_0$ affinché ciò valga per ogni $m\geq m_0$:
+i rami eliminati sono in numero finito e restano limitati sulla sfera.
+
+Da $g_K=g_L$ seguono $w_K=w_L$ e l'identità intera
+$\mathcal F_K(z)\mathcal F_K(-z)=\mathcal F_L(z)\mathcal F_L(-z)$.
+Per ogni indice grande le due funzioni reali analitiche
+\[
+P_m(u)=\mathcal F_L(z_{m,K}(u)u),\qquad
+Q_m(u)=\mathcal F_L(-z_{m,K}(u)u)
+\]
+soddisfano $P_mQ_m=0$ sulla sfera connessa. Se $P_m$ non è
+identicamente nulla, è non nulla su un aperto e lì $Q_m=0$;
+l'identità analitica implica allora $Q_m\equiv0$. Quindi almeno una
+è identicamente nulla. Non possono esserlo entrambe: nella direzione
+appena scelta si otterrebbe una molteplicità almeno due per uno zero
+semplice di $\mathcal F_K(\zeta u)\mathcal F_K(-\zeta u)$.
+Esiste perciò una sequenza $\epsilon_m\in\{-1,1\}$, indipendente da
+$u$, che seleziona per $L$ rispettivamente $z_{m,K}$ o il suo coniugato.
+La classificazione che ne segue vale anche nelle direzioni in cui
+$\gamma_K=0$. Infatti, aumentando ancora $m_0$, l'asintotica uniforme
+in (Z) separa, per ogni $u$, i dischi contenenti indici diversi,
+compresi i loro coniugati, e li separa dagli zeri eccezionali.
+Se $z_{m,K}(u)$ non è reale, il suo coniugato non è uno zero di $K$:
+il solo ramo che potrebbe contenerlo è quello di indice $m$.
+Lo zero del prodotto è dunque semplice, e il fattore selezionato
+esaurisce la sua molteplicità. Se è reale, la simmetria degli zeri
+di $\mathcal F_L$ rispetto all'asse immaginario forza la stessa
+molteplicità nei due fattori, quindi una in ciascuno.
+
+Per ciascuna direzione fissata, tutti gli zeri di $\mathcal F_L(\zeta u)$
+con parte reale positiva, tranne un numero finito, sono dunque
+\begin{equation}\label{eq:chosenroots}
+\zeta_{m,L}=x_m+i y_m,\qquad
+x_m=\frac{(2m+1)\pi}{w}+o(1),\qquad
+y_m=\epsilon_m\gamma_K(u)+o(1).
+\end{equation}
+Le molteplicità sono uno. Se uno zero di $K$ è reale, la molteplicità
+due nel prodotto impone ancora molteplicità uno nel fattore di $L$.
+Gli zeri nella metà sinistra sono $-\overline{\zeta_{m,L}}$, per la
+realtà dell'indicatrice. Non vi sono zeri sull'asse immaginario, perché
+$\mathcal F_L(i\tau u)>0$ per $\tau$ reale.
+
+Fissiamo ora una direzione che soddisfi \eqref{eq:linearends} e
+scriviamo $F(\zeta)=\mathcal F_L(\zeta u)$.
+Raggruppiamo tutti gli zeri, compresi quelli eccezionali e contati con
+molteplicità, nelle coppie $\zeta_j=x_j+iy_j,-\overline{\zeta_j}$,
+con $x_j>0$. Abbiamo $|y_j|\leq M$, $x_j\asymp j$ per $j$ grande.
+In particolare
+\[
+\sum_j\left|\frac1{\zeta_j}-\frac1{\overline{\zeta_j}}\right|<\infty,
+\qquad \sum_j|\zeta_j|^{-2}<\infty.
+\]
+La fattorizzazione di Hadamard, raggruppando i fattori canonici di
+genere uno e assorbendone gli esponenziali lineari, diventa
+\begin{equation}\label{eq:pairedproduct}
+F(\zeta)=F(0)e^{iq\zeta}
+\prod_j\left(1-\frac{\zeta}{\zeta_j}\right)
+       \left(1+\frac{\zeta}{\overline{\zeta_j}}\right),\qquad q\in\R.
+\end{equation}
+Per controllare l'ipotesi di crescita del teorema di Hadamard,
+$L\subset B(0,T)$ implica
+$|F(\zeta)|\leq\vol(L)e^{T|\operatorname{Im}\zeta|}$.
+Il polinomio nell'esponenziale ha quindi grado al più uno; si veda
+anche \cite[p.~4]{Siu24}. Non rimane un fattore intero arbitrario.
+Il prodotto converge uniformemente sui compatti: il fattore doppio
+meno uno è $O((|\zeta|+|\zeta|^2)/x_j^2)$ su ogni compatto.
+Il coefficiente lineare nell'esponenziale è immaginario puro perché sia
+$F'(0)/F(0)$ sia la derivata logaritmica del prodotto in zero sono
+immaginarie pure. Qui si usa $F(0)=\vol(L)>0$.
+
+Per $\tau>0$ poniamo
+\[
+D_L(\tau)=\log F(i\tau)-\log F(-i\tau).
+\]
+Tutti i fattori doppi in \eqref{eq:pairedproduct} sono positivi
+sull'asse immaginario. Possiamo quindi usare logaritmi reali e ottenere
+\begin{equation}\label{eq:logproduct}
+D_L(\tau)=-2q\tau+\sum_j R_{x_j,y_j}(\tau),\qquad
+R_{x,y}(\tau)=
+\log\frac{x^2+(\tau-y)^2}{x^2+(\tau+y)^2}.
+\end{equation}
+La serie converge assolutamente per ogni $\tau$ fissato.
+Per $|y|\leq M$ e $\tau\geq2M+1$,
+$|R_{x,y}(\tau)|\leq C_M\tau/(x^2+\tau^2)$.
+Poiché gli $x_j$ crescono linearmente, la serie in
+\eqref{eq:logproduct} è limitata uniformemente per $\tau\to\infty$.
+
+D'altra parte, \eqref{eq:linearends} dà direttamente
+\begin{equation}\label{eq:laplaceends}
+F(i\tau)=e^{-\alpha_L\tau}\frac{a_L}{\tau^2}(1+o(1)),\qquad
+F(-i\tau)=e^{\beta_L\tau}\frac{b_L}{\tau^2}(1+o(1)).
+\end{equation}
+Per esempio, dopo aver posto $s=t-\alpha_L$, il cambio di scala
+$r=\tau s$ e $A_L(\alpha_L+s)/s\to a_L$ danno il primo limite;
+il contributo lontano dall'estremo è esponenzialmente piccolo.
+Dividendo \eqref{eq:logproduct} per $\tau$ e confrontando con
+\eqref{eq:laplaceends}, si ricava $2q=\alpha_L+\beta_L$.
+Pertanto la quantità centrata
+\begin{equation}\label{eq:centeredlog}
+B_L(\tau):=D_L(\tau)+(\alpha_L+\beta_L)\tau
+=\sum_j R_{x_j,y_j}(\tau)
+\end{equation}
+soddisfa
+\begin{equation}\label{eq:laplaceJ}
+\lim_{\tau\to\infty}B_L(\tau)=\log(a_L/b_L).
+\end{equation}
+Questo argomento non differenzia alcun resto asintotico né la serie.
+
+Lo sviluppo $\log[(1-v)/(1+v)]=-2v+O(v^3)$, con
+$v=2\tau y/(x^2+\tau^2+y^2)$, dà uniformemente in $x>0$
+\begin{equation}\label{eq:kernel}
+R_{x,y}(\tau)=-\frac{4y\tau}{x^2+\tau^2}
++O_M\left(\frac{\tau}{(x^2+\tau^2)^2}\right).
+\end{equation}
+Infatti $|v|$ resta separato da uno; sia la correzione del denominatore
+sia il termine cubico sono maggiorati dal resto scritto.
+Più precisamente $|v|\leq4/5$ e
+\[
+\left|\log\frac{1-v}{1+v}+2v\right|
+\leq\frac{2|v|^3}{3(1-|v|^2)}.
+\]
+Posto $A=x^2+\tau^2$, la correzione fra $-2v$ e $-4y\tau/A$
+è al più $4M^3\tau/A^2$. Il resto complessivo è dunque al più
+$20M^3\tau/A^2$. Poiché $x_j\asymp j$, il confronto con
+$\int_0^\infty\tau/(\rho^2t^2+\tau^2)^2\,dt=\pi/(4\rho\tau^2)$, $\rho>0$,
+giustifica la sommabilità uniforme del resto per $\tau\to\infty$.
+La somma dei resti è $O(\tau^{-2})$, mentre ogni coppia eccezionale
+fissata contribuisce $o(1)$. Sostituendo \eqref{eq:chosenroots} si trova
+\[
+B_L(\tau)=-4\gamma_K(u)\sum_{m\geq m_0}
+\frac{\epsilon_m\tau}{((2m+1)\pi/w)^2+\tau^2}+o(1).
+\]
+Per gli $y_m$ si separa una testa finita da una coda con errore
+uniformemente piccolo e si usa la somma limitata dei pesi positivi.
+Per gli $x_m$, il loro scarto dal modello è limitato e la somma dei
+moduli delle derivate di $\tau/(x^2+\tau^2)$ è $O(\tau^{-1})$;
+la sostituzione cambia dunque la somma di $o(1)$.
+Ponendo $\tau=2\pi R/w$ otteniamo
+\begin{equation}\label{eq:universalmean}
+B_L(2\pi R/w)=-w\gamma_K(u)M(R)+o(1),\qquad
+M(R)=\frac2\pi\sum_{m\geq m_0}
+\frac{\epsilon_m R}{(m+1/2)^2+R^2}.
+\end{equation}
+La media $M(R)$ non dipende da $u$ e ha pesi positivi. La loro somma
+tende a $\frac2\pi\int_0^\infty(1+t^2)^{-1}\,dt=1$, quindi
+$\limsup|M(R)|\leq1$.
+
+Esiste una direzione con \eqref{eq:linearends} e $\gamma_K\ne0$, perché
+quest'ultima disuguaglianza vale su un aperto. In tale direzione
+\eqref{eq:universalmean}--\eqref{eq:laplaceJ} provano che $M(R)$ ha un
+limite $c\in[-1,1]$. Riutilizzando il medesimo limite in ogni direzione
+ammissibile otteniamo \eqref{eq:scalartransport}.
+\end{proof}
+
+\begin{remark}[Quali ipotesi usa il trasporto]
+Il Lemma \ref{lem:mean} usa (Z), non (U). Per il caso $C^9_+$,
+l'ipotesi spettrale è fornita dal risultato pubblicato di Bianchi;
+per il criterio esteso sulle sezioni, è fornita dai Lemmi
+\ref{lem:branches} e \ref{lem:allzeros}. Sul concorrente $L$ si usano
+soltanto le espansioni \eqref{eq:linearends}, l'identità delle
+trasformate e le proprietà di una funzione intera di tipo esponenziale.
+\end{remark}
+
+\paragraph{Seconda derivazione del limite, mediante differenze finite.}
+Si può verificare il passaggio spettrale senza identificare il
+coefficiente $q$ dell'esponenziale in \eqref{eq:pairedproduct}.
+Con la stessa $D_L$, poniamo
+\[
+H_L(\tau)=D_L(2\tau)-2D_L(\tau).
+\]
+Ogni termine lineare in $\tau$ si cancella esattamente. La
+fattorizzazione di Hadamard dà quindi
+\[
+H_L(\tau)=\sum_j\bigl(R_{x_j,y_j}(2\tau)-2R_{x_j,y_j}(\tau)\bigr),
+\]
+mentre le espansioni di Laplace \eqref{eq:laplaceends} danno
+$H_L(\tau)\to\log(b_L/a_L)$.
+Per $|y|\leq M$ e $\tau\geq2M+1$, \eqref{eq:kernel} implica
+\[
+R_{x,y}(2\tau)-2R_{x,y}(\tau)
+=\frac{24y\tau^3}{(x^2+\tau^2)(x^2+4\tau^2)}
++O_M\!\left(\frac{\tau}{(x^2+\tau^2)^2}\right).
+\]
+La somma dei resti tende a zero. Con le stesse sostituzioni degli
+zeri e $\tau=2\pi R/w$ si ottiene
+\[
+H_L(2\pi R/w)=w\gamma_K(u)\,N(R)+o(1),\qquad
+N(R)=\frac{12}{\pi}\sum_{m\geq m_0}
+\frac{\epsilon_m R^3}
+{((m+1/2)^2+R^2)((m+1/2)^2+4R^2)}.
+\]
+Anche questi pesi sono positivi e la loro somma tende a uno, poiché
+\[
+\frac{12}{\pi}\int_0^\infty
+\frac{dt}{(1+t^2)(4+t^2)}=1.
+\]
+Una direzione ammissibile con $\gamma_K\ne0$ forza l'esistenza del
+limite di $N(R)$; lo stesso limite in ogni direzione ridà
+\eqref{eq:scalartransport}. È una seconda derivazione del passaggio
+al limite, con un nucleo diverso, che elimina ogni dipendenza dal
+valore di $q$. Non sostituisce le verifiche dei rami di zeri e del
+lemma geometrico che segue.
+
+\subsection*{Dati quadratici quasi ovunque del concorrente}
+Per il prossimo passaggio usiamo il teorema di Rademacher e la formula
+dell'area per mappe Lipschitz. Dopo aver dedotto il supporto $C^{1,1}$,
+Rademacher applicato al suo gradiente fornisce le espansioni quadratiche
+quasi ovunque. Esplicitiamo l'argomento per il concorrente arbitrario.
+
+\begin{lemma}\label{lem:roughcompetitor}
+Sia $K\in C^2_+$ e sia $L$ convesso con $g_L=g_K$. La funzione di
+supporto omogenea di $L$ è $C^{1,1}$ lontano dall'origine. Quasi ovunque
+su $\Sph$ esistono matrici positive definite $R_L(u)$, con
+\[
+dS_L(u)=\det R_L(u)\,d\sigma(u),\qquad
+\{\det R_L(u),\det R_L(-u)\}=
+\{f_K(u),f_K(-u)\}.
+\]
+In queste direzioni valgono \eqref{eq:linearends}, con
+$a_L=2\pi\sqrt{\det R_L(-u)}$ e
+$b_L=2\pi\sqrt{\det R_L(u)}$.
+\end{lemma}
+\begin{proof}
+Poniamo $D=K-K=L-L$. Le Hessiane distribuzionali delle funzioni di
+supporto omogenee soddisfano, come misure matriciali,
+\[
+0\leq D^2h_L\leq D^2h_D,
+\]
+poiché $h_D=h_L+h_{-L}$. Su ogni anello lontano dall'origine il membro
+destro ha una densità continua limitata. Dunque $h_L\in C^{1,1}$ e
+la mappa $p_L(u)=\nabla h_L(u)$ è Lipschitz. Essa parametrizza tutto il
+bordo, e il suo Jacobiano tangenziale è $\det R_L(u)$, dove
+$R_L=\nabla_{\Sph}^2h_L+h_LI\succeq0$ quasi ovunque.
+La formula dell'area dà $dS_L=\det R_L\,d\sigma$: nei punti regolari
+del bordo la normale è unica; i punti non regolari hanno area nulla.
+Più precisamente, per ogni insieme boreliano $E\subset\Sph$, la
+molteplicità della restrizione $p_L|_E$ in un punto regolare $x$ vale
+$\ind_E(\nu_L(x))$. La formula dell'area, integrata su questi punti,
+dà $\int_E\det R_L\,d\sigma=S_L(E)$; l'insieme non regolare non
+contribuisce. Questo esclude anche una parte singolare della misura
+di area, senza aver assunto un bordo $C^2$ per $L$.
+
+Fissiamo una direzione in cui esistano le derivate seconde del
+supporto in $u$ e in $-u$; queste direzioni hanno misura piena.
+Infatti, nelle carte $v\mapsto(v,1)$ il gradiente del supporto è
+Lipschitz e quindi differenziabile quasi ovunque. Integrando la
+sua espansione del primo ordine lungo un segmento si ottiene
+il corrispondente sviluppo di Taylor quadratico.
+Studiamo dapprima soltanto l'estremo superiore, scegliendo $u=e_3$
+e $p_L(u)=0$. Nel riferimento tangente, con $R=R_L(u)\succeq0$,
+\[
+G(v):=h_L(v,1)=\tfrac12 v^T Rv+o(|v|^2),\qquad v\in\R^2.
+\]
+Mostriamo, includendo il caso degenere, che
+\begin{equation}\label{eq:allslopes}
+\lim_{s\downarrow0}\frac{A_L(u,\beta_L-s)}s
+=2\pi\sqrt{\det R_L(u)}.
+\end{equation}
+
+Le sezioni vicine all'estremo si restringono al punto esposto $0$,
+perché il supporto è differenziabile. Dalla stima
+$G(v)\leq C|v|^2$, scegliendo $v=y/(2C)$ nella disuguaglianza
+$v\cdot y-s\leq G(v)$, segue $|y|^2\leq4Cs$ per $s$ piccolo.
+Le sezioni riscalate $E_s=\{Y:(\sqrt{s}Y,-s)\in L\}$ sono dunque
+uniformemente limitate. Per ogni loro punto limite $Y$, ponendo
+$v=\sqrt{s}V$ nelle disuguaglianze di supporto otteniamo
+\[
+V\cdot Y-1\leq\tfrac12 V^T RV\qquad\text{per ogni }V\in\R^2.
+\]
+Se $R$ è singolare, scegliendo $V$ arbitrario nel suo nucleo si
+ricava $Y\in\operatorname{im}R$. Questo sottospazio ha dimensione
+al più uno. Per compattezza, gli $E_s$ sono infine contenuti in ogni
+intorno prefissato di questo sottospazio entro un disco limitato.
+La loro area tende quindi a zero, provando \eqref{eq:allslopes}
+quando $\det R=0$.
+
+Se invece $R>0$, il punto $p_L(u)$ ha una sola normale. Infatti, una
+seconda normale produrrebbe, per convessità del cono normale, un
+segmento uscente da zero nella carta $(v,1)$ sul quale $G(v)=0$;
+ciò contraddice l'espansione quadratica positiva. Il punto $y=0$ è
+interno alla proiezione di $L$ sul piano tangente: altrimenti un
+piano di supporto verticale darebbe un'altra normale. Il bordo
+superiore si scrive quindi localmente $z=-\phi(y)$, con $\phi$
+convessa e finita su un disco e $\partial\phi(0)=\{0\}$.
+
+La dualità di Legendre fra $G$ e $\phi$ è locale in entrambi i sensi.
+L'unicità del punto esposto implica che i punti di contatto tendano
+a zero quando $v\to0$. Viceversa, i sottogradienti di $\phi$ sono
+localmente limitati e ogni loro limite per $y\to0$ appartiene a
+$\partial\phi(0)=\{0\}$. Per ogni $\varepsilon>0$ piccolo,
+le stime locali
+\[
+\tfrac12 v^T(R-\varepsilon I)v\leq G(v)
+\leq\tfrac12 v^T(R+\varepsilon I)v
+\]
+si trasformano quindi nelle stime
+\[
+\tfrac12 y^T(R+\varepsilon I)^{-1}y\leq\phi(y)
+\leq\tfrac12 y^T(R-\varepsilon I)^{-1}y.
+\]
+I sottolivelli $\{\phi\leq s\}$, che descrivono le sezioni vicine
+all'estremo, sono racchiusi fra le corrispondenti ellissi.
+Per giustificare che il bordo inferiore della fibra non interferisce,
+osserviamo che sopra un punto interno alla proiezione la fibra di un
+corpo convesso pieno ha lunghezza positiva. Il suo estremo inferiore
+è una funzione convessa, finita e continua nell'interno della
+proiezione. In un intorno di $y=0$ esso resta quindi sotto $-d$ per
+qualche $d>0$. Le sezioni si restringono a zero, perciò per $s$ piccolo
+la sola condizione effettiva è $\phi(y)\leq s$. Dividendo
+le aree per $s$ e poi mandando $\varepsilon$ a zero si ottiene
+\eqref{eq:allslopes}, perché l'area di
+$\{Y:Y^TR^{-1}Y/2\leq1\}$ è $2\pi\sqrt{\det R}$.
+
+Lo stesso argomento in $-u$ fornisce le due espansioni di
+\eqref{eq:linearends} con
+coefficienti inizialmente soltanto non negativi e finiti,
+\[
+a_L=2\pi\sqrt{\det R_L(-u)},\qquad
+b_L=2\pi\sqrt{\det R_L(u)}.
+\]
+Non abbiamo ancora usato la loro positività. Essa è forzata proprio
+dal covariogramma: l'identità
+$\mathcal F_L(z)\mathcal F_L(-z)=\mathcal F_K(z)\mathcal F_K(-z)$,
+valutata in $z=i\tau u$, e l'uguaglianza delle larghezze danno
+\begin{equation}\label{eq:laplaceproduct}
+a_Lb_L
+=\lim_{\tau\to\infty}\tau^4e^{-w\tau}
+  \mathcal F_L(i\tau u)\mathcal F_L(-i\tau u)
+=a_Kb_K>0.
+\end{equation}
+Il limite di Laplace vale anche quando un coefficiente è zero:
+$A(\alpha+s)=o(s)$ implica
+$\tau^2 e^{\alpha\tau}\mathcal F(i\tau u)\to0$.
+Dunque entrambi i determinanti di $L$ sono positivi e
+\[
+\det R_L(u)\det R_L(-u)=f_K(u)f_K(-u).
+\]
+Questo recupera il prodotto senza calcolare un'intersezione di calotte
+né postulare un bordo regolare per il concorrente.
+
+Infine le derivate direzionali del covariogramma all'origine danno le
+aree delle proiezioni. L'iniettività della trasformata coseno sulle
+misure pari implica $S_L+S_{-L}=S_K+S_{-K}$, dunque l'uguaglianza
+delle somme dei determinanti quasi ovunque. Somma e prodotto danno
+la coppia non ordinata dell'enunciato.
+\end{proof}
+
+\begin{theorem}[Estensione proposta ai concorrenti arbitrari]\label{thm:allcompetitors}
+Sia $K\in C^2_+$ in $\R^3$ e supponiamo (U) per $K$.
+Per ogni corpo convesso $L$ in $\R^3$, senza un'ipotesi di regolarità
+su $L$, vale
+\[
+g_L=g_K\quad\Longrightarrow\quad L=v+K\quad\text{oppure}\quad L=v-K.
+\]
+In particolare, se i passaggi della presente sezione sono confermati
+dalla revisione indipendente, il criterio di Dini della Sezione
+\ref{sec:dini} determina il corpo anche fra concorrenti arbitrari.
+\end{theorem}
+\begin{proof}
+Se $K$ è centralmente simmetrico, $\vol(D)=8\vol(K)=8\vol(L)$.
+L'uguaglianza in Brunn--Minkowski per $L+(-L)$ impone la simmetria
+centrale di $L$; $D$ determina quindi entrambi a meno di traslazione.
+
+Altrimenti (U) implica (Z), e il Lemma \ref{lem:roughcompetitor} dà
+\eqref{eq:linearends} quasi ovunque e inoltre
+\[
+\gamma_L(u):=\frac{\log(b_L(u)/a_L(u))}{w(u)}
+\in\{\gamma_K(u),-\gamma_K(u)\}\quad\text{quasi ovunque}.
+\]
+Il Lemma \ref{lem:mean} fornisce nello stesso tempo
+$\gamma_L=c\gamma_K$ con un solo numero $c\in[-1,1]$.
+Su un aperto $\gamma_K\ne0$; scegliendovi una direzione ammissibile,
+le due relazioni impongono $c=1$ oppure $c=-1$.
+Rapporto e coppia non ordinata danno allora
+$\det R_L(u)=f_K(u)$ quasi ovunque, oppure
+$\det R_L(u)=f_K(-u)$ quasi ovunque. Le misure di area coincidono
+quindi con $S_K$ oppure $S_{-K}$. L'unicità di Minkowski conclude.
+\end{proof}
+
+\begin{corollary}[Caso $C^9_+$ del programma proposto]\label{cor:targetC9}
+La catena di argomenti della presente sezione dà precisamente
+\eqref{eq:target}: un corpo $K\in C^9_+$ in $\R^3$ è determinato
+dal proprio covariogramma fra tutti i corpi convessi, a meno di
+traslazione e riflessione centrale.
+\end{corollary}
+\begin{proof}
+Per $K\in C^9_+$, \cite[Teoremi 4.1--4.2 e dimostrazione del
+Teorema 4.2, pp.~14--15 del manoscritto]{B16} fornisce già i rami
+analitici globali, la semplicità e la classificazione degli zeri
+scalari grandi. Per $n=3$ il termine reale della loro asintotica è
+$(2m+1)\pi/w_K$, quello immaginario è $\gamma_K$ e il resto è
+$O(m^{-1})$ uniforme. Gli altri zeri appartengono a un insieme
+limitato. Sono esattamente le proprietà usate nel Lemma
+\ref{lem:mean}, come osservato sopra.
+
+Il Lemma \ref{lem:roughcompetitor} fornisce, per un concorrente
+convesso arbitrario, le pendenze agli estremi e le coppie non ordinate
+quasi ovunque. Se $K$ non è centralmente simmetrico, il Lemma
+\ref{lem:mean}, applicato mediante (Z), dà un solo $c\in[-1,1]$ con
+$\gamma_L=c\gamma_K$ quasi ovunque. La coppia non ordinata dà anche
+$\gamma_L\in\{\gamma_K,-\gamma_K\}$ quasi ovunque. La funzione
+continua $\gamma_K$ è non nulla su un aperto; scegliendovi una
+direzione appartenente all'insieme di misura piena dei due lemmi
+si ricava $c=1$ oppure $c=-1$.
+
+Se $c=1$, il rapporto ordinato e la coppia non ordinata impongono
+$\det R_L(u)=f_K(u)$ quasi ovunque; se $c=-1$, impongono
+$\det R_L(u)=f_K(-u)$ quasi ovunque. Nei punti con coppia uguale
+le due possibilità coincidono. La formula dell'area nel Lemma
+\ref{lem:roughcompetitor} dà quindi $S_L=S_K$ oppure $S_L=S_{-K}$
+come misure, e l'unicità di Minkowski conclude.
+
+Se $K$ è centralmente simmetrico, poniamo $D=K-K=L-L$.
+Da $g_K(0)=g_L(0)$ segue
+$\vol(D)=8\vol(K)=8\vol(L)$. È il caso di uguaglianza in
+Brunn--Minkowski per $L+(-L)$; quindi $L$ è centralmente simmetrico.
+Il corpo differenza determina allora entrambi a meno di traslazione.
+
+Questa dimostrazione usa (Z) da \cite{B16}, i due lemmi appena
+richiamati e l'unicità di Minkowski; il criterio di Dini e l'ipotesi
+(U) non intervengono nel caso $C^9_+$.
+\end{proof}
+
+\paragraph{Stato di questo sviluppo.}
+La Sezione \ref{sec:transport} è il passaggio più delicato e nuovo per
+questo quaderno. Non se ne rivendica la novità bibliografica e non si
+sostituisce una revisione indipendente con la compilazione del testo.
+La fattorizzazione canonica, il limite della media positiva e il lemma
+sui dati quadratici quasi ovunque sono stati sviluppati e sottoposti
+ai controlli interni descritti nel testo; non è stata individuata una
+lacuna nella catena principale. Sono anche i passaggi centrali da
+riesaminare indipendentemente. Nessuna regolarità di $L$ è assunta:
+il supporto $C^{1,1}$ e le espansioni delle sezioni sono dedotti
+dall'uguaglianza dei covariogrammi. La stesura della prova candidata
+del Corollario \ref{cor:targetC9} è completa in questo senso, senza
+rinviare la conclusione a un ulteriore lemma non dimostrato.
+Il confronto bibliografico è rilevante: \cite[Osservazione 5.2]{B16}
+segnala espressamente il limite ai concorrenti regolari del proprio
+teorema; \cite[p.~23 del manoscritto, dopo il Teorema 3.25]{B23}
+indica ancora esplicitamente come aperta l'estensione ai concorrenti
+convessi arbitrari. Il Corollario \ref{cor:targetC9} è quindi il
+bersaglio bibliografico preciso, distinto dall'affinamento $C^{2,\eta}_+$.
+L'estensione proposta qui non va presentata come una
+semplice citazione o come un risultato già acquisito in letteratura.
+Anche se confermato integralmente, il risultato non copre un primo
+corpo convesso arbitrario: il caso conclusivo richiede $K\in C^9_+$;
+l'estensione accessoria del Teorema \ref{thm:allcompetitors} richiede
+invece (U). La ricerca si arresta su questa versione per il riesame
+richiesto dall'utente.
+
+\section{Aggirare direzioni eccezionali senza perdere la scelta globale}
+\label{sec:exceptional}
+La compattezza uniforme su tutta la sfera può essere sostituita da una
+condizione locale su un insieme connesso di misura piena. Questo
+affinamento usa ancora il trasporto proposto nella Sezione
+\ref{sec:transport}, con il medesimo stato di revisione.
+
+\begin{theorem}[Versione locale del criterio sulle sezioni]\label{thm:localU}
+Sia $K\in C^2_+$. Supponiamo che esista un aperto connesso
+$\Omega\subset\Sph$ il cui complementare ha misura sferica nulla,
+tale che (S) valga per $u\in\Omega$ e che
+\[
+u\longmapsto T_{K,u}\quad\text{sia continua da }\Omega\text{ in }L^1(\R).
+\]
+Allora la dimostrazione del Teorema \ref{thm:allcompetitors} si estende
+a $K$: ogni corpo convesso $L$ con $g_L=g_K$ è una traslazione di
+$K$ oppure di $-K$.
+\end{theorem}
+\begin{proof}
+Il caso centralmente simmetrico è già risolto. Altrimenti scegliamo
+$u_0\in\Omega$ con $\gamma_K(u_0)\ne0$ e un'esaustione crescente di
+$\Omega$ mediante aperti connessi $\Omega_j$ con chiusura compatta in
+$\Omega$, tutti contenenti $u_0$.
+Su ciascuna chiusura la famiglia $T_{K,u}$ è compatta in $L^1$.
+Le dimostrazioni dei Lemmi \ref{lem:strip}, \ref{lem:branches} e
+\ref{lem:allzeros} valgono quindi uniformemente su $\Omega_j$, con
+una soglia $m_j$ che può crescere con $j$.
+
+Su $\Omega_1$ definiamo la sequenza $\epsilon_m$ mediante l'identità
+analitica dei due fattori. Su $\Omega_j$, per $m$ sufficientemente
+grande, il ramo coincide con quello di $\Omega_1$ nell'intersezione:
+entrambi sono lo zero unico vicino allo stesso $\lambda_m(u)$.
+La scelta del fattore su $\Omega_j$ coincide quindi con $\epsilon_m$,
+perché $\Omega_j$ è connesso e lo zero in $u_0$ è non reale e semplice.
+
+Per ogni $u\in\Omega$ otteniamo dunque \eqref{eq:chosenroots} con la
+\emph{stessa} sequenza di segni, a meno di un numero finito di indici
+dipendente da $u$. Questi indici non modificano il limite di
+$B_L$ né la media $M(R)$, perché ogni peso fissato tende a zero.
+La prova del Lemma \ref{lem:mean} prosegue su $\Omega$. Il Lemma
+\ref{lem:roughcompetitor} fornisce i dati quadratici quasi ovunque;
+poiché $\Omega$ ha misura piena, il confronto $c\gamma_K=\pm\gamma_K$
+e l'uguaglianza delle misure di area concludono come prima.
+\end{proof}
+
+\begin{corollary}[Irregolarità isolate del bordo]\label{cor:isolated}
+Il precedente argomento si applica a un corpo $K\in C^2_+$ il cui
+bordo sia localmente $C^{2,\eta}$, con esponente positivo anche variabile
+da carta a carta, fuori da un numero finito di punti.
+\end{corollary}
+\begin{proof}
+Togliamo dalla sfera le normali dei punti eccezionali e le loro
+antipodali. Il complementare $\Omega$ è aperto, connesso e di misura
+piena. Su ogni compatto di $\Omega$, gli estremi delle sezioni stanno
+in un numero finito di carte con un modulo di Dini comune.
+Le stime di coda della Proposizione \ref{prop:dini} sono quindi
+uniformi su quel compatto. Le porzioni interne delle sezioni richiedono
+soltanto la regolarità $C^2$ globale. Ne segue la continuità locale
+in $L^1$ richiesta dal Teorema \ref{thm:localU}.
+\end{proof}
+
+La connessione qui svolge un ruolo preciso: rende indipendente dalla
+direzione il segno di ciascun ramo, quando l'indice è abbastanza grande
+su un dato compatto. Non si è dimostrato che, per un corpo $C^2_+$
+arbitrario, esista un aperto connesso di misura piena con tali proprietà.
+In particolare non si può sostituire questa ipotesi con la sola
+differenziabilità seconda quasi ovunque.
+
+\section{Un ostacolo reale all'estensione automatica a $C^2_+$}
+\label{sec:nonlone}
+La condizione (S) non vale per ogni corpo $C^2_+$. Ecco una costruzione
+locale che si può inserire in un corpo di rivoluzione chiuso.
+Per $0<s<s_0<e^{-2}$ definiamo
+\[
+q'(s)=\int_{1/s}^{\infty}\frac{\sin v}{v\log v}\,dv,
+\qquad q(s)=\int_0^s q'(t)\,dt.
+\]
+L'integrale improprio converge per Dirichlet. Integrando per parti si ha
+$q'(s)=O(s/\log(1/s))$, $q(s)=O(s^2/\log(1/s))$, mentre
+\[
+q''(s)=\frac{\sin(1/s)}{s\log(1/s)},\qquad
+s q''(s)\longrightarrow0,
+\qquad\int_0^{s_0}|q''(s)|\,ds=\infty.
+\]
+L'ultima divergenza equivale a quella di
+$\int_{1/s_0}^{\infty}|\sin v|/(v\log v)\,dv$ e segue confrontando
+le parti centrali dei successivi semiperiodi con la serie
+$\sum_{n\geq2}1/(n\log n)$.
+
+Sia $\chi$ un cutoff liscio, uguale a uno per $s<s_0/3$ e nullo per
+$s>2s_0/3$. Poniamo, su $[0,2]$,
+\[
+f(s)=2s-s^2+\delta\chi(s)q(s),\qquad
+K=\{(y,s)\in\R^2\times[0,2]: |y|^2\leq f(s)\},
+\]
+con $\delta>0$ sufficientemente piccolo, e $q(0)=0$.
+Per $\delta=0$ si ottiene la sfera unitaria traslata e
+$2ff''-(f')^2=-4$. I termini perturbativi in questa espressione sono
+uniformemente limitati e tendono a zero al polo inferiore, poiché
+$q'=o(1)$, $q=o(s)$ e $s q''=o(1)$. Per $\delta$ piccolo rimangono
+$f>0$ all'interno e $2ff''-(f')^2<0$; dunque $\sqrt f$ è strettamente
+concava e il corpo di rivoluzione è convesso con curvature positive
+fuori dai poli.
+
+Al polo inferiore il grafico è $s=\phi(r)=f^{-1}(r^2)$. Si ha
+\[
+\frac{\phi'(r)}r=\frac2{f'(s)}\longrightarrow1,
+\qquad
+\phi''(r)=\frac2{f'(s)}-\frac{4r^2 f''(s)}{f'(s)^3}
+\longrightarrow1.
+\]
+Quindi il grafico radiale è $C^2$ anche al polo, con Hessiana identità.
+Vicino al polo superiore è esattamente sferico. Ne risulta $K\in C^2_+$.
+Tuttavia le aree delle sezioni orizzontali sono $A(s)=\pi f(s)$ e
+$A''\notin L^1$ vicino a $0$.
+
+Questo esempio non mette in discussione l'unicità del covariogramma.
+Dimostra precisamente che non si può eliminare l'ipotesi (S) affermando
+che essa segue dalla sola regolarità $C^2_+$.
+Il bordo dell'esempio è tuttavia liscio fuori dal polo inferiore:
+rientra quindi nella versione con direzioni eccezionali del Corollario
+\ref{cor:isolated}, se l'estensione della Sezione \ref{sec:transport}
+è confermata. Il fallimento di (S) in una direzione non è, da solo,
+un ostacolo definitivo alla strada analitica.
+
+\section{Che cosa resta da dimostrare}
+Il criterio dei momenti risolve i casi senza sottoinsiemi propri bilanciati.
+Non elimina i casi bilanciati: l'esempio esplicito mostra che nemmeno
+l'intera informazione locale vicino a origine e bordo del supporto
+può eliminarli tutti. Occorrono traslazioni interne.
+
+Il teorema sulla parte pari elimina tutti gli scambi parziali che preservano
+$\ind_K+\ind_{-K}$ rispetto a un centro comune. Non è dimostrato che
+ogni coppia di corpi convessi con lo stesso covariogramma possa essere
+ridotta a questa situazione. In particolare, il corpo differenza fornisce
+$h_K(u)+h_K(-u)$, non $\ind_K(x)+\ind_K(-x)$.
+
+Una prossima domanda circoscritta è studiare scambi di porzioni riferiti
+a centri diversi: in quel caso la fattorizzazione \eqref{eq:cross} con
+un'unica parte pari non è disponibile. L'argomento degli zeri scarta
+invece le scelte di curvatura bilanciate sotto (U); al di fuori di
+questa ipotesi la loro esclusione resta da dimostrare.
+
+Le Sezioni \ref{sec:zeros}--\ref{sec:dini} forniscono una terza strada:
+rendere globale la scelta con l'analiticità della trasformata, dopo aver
+costruito un ramo di zeri con asintotica uniforme. La Sezione
+\ref{sec:transport} propone di trattare un concorrente arbitrario
+trasportando le pendenze mediante una media positiva degli scambi.
+Occorre revisionare questa estensione e, per la domanda generale,
+eliminare l'ipotesi (U) anche sul primo corpo. La costruzione della
+Sezione \ref{sec:nonlone} mostra perché quest'ultimo passaggio non è
+automatico neppure per un corpo $C^2_+$. I bordi non lisci, le facce
+e le curvature degeneri richiedono inoltre un argomento ulteriore.
+La Sezione \ref{sec:exceptional} permette di aggirare eccezioni isolate,
+ma non prova l'esistenza delle direzioni regolari connesse necessarie
+per un corpo generico.
+
+\paragraph{Verifiche.}
+Il file \texttt{verifica\_scambi.py} controlla con aritmetica razionale le
+identità polinomiali per $P_3$, i raccordi e le derivate del cutoff, il
+margine positivo di convessità e le disuguaglianze per il punto testimone
+e la corona. Non sostituisce le dimostrazioni e non è un proof checker.
+Il file \texttt{verifica\_media\_zeri.py} confronta inoltre
+$J_L(\tau)=B_L(\tau)-\tau B_L'(\tau)$, usato in una prima versione
+dell'argomento, calcolato direttamente dagli integrali di Laplace con la
+somma numerica sui primi $10\,000$ zeri per
+$A(t)=(1-t^2)(1+t/5)$, $-1\leq t\leq1$.
+Per $\tau=20,100,500$ gli scarti osservati sono rispettivamente circa
+$4.4\cdot10^{-11}$, $5.5\cdot10^{-9}$ e $6.9\cdot10^{-7}$.
+La versione semplificata della prova usa direttamente $B_L$ e la
+somma dei logaritmi in \eqref{eq:centeredlog}. Lo stesso script ne
+confronta i valori diretti con la somma troncata e con una stima
+integrale della coda del modello; gli scarti dopo quest'ultima
+correzione sono circa $5.3\cdot10^{-14}$, $2.6\cdot10^{-13}$ e
+$1.3\cdot10^{-12}$. La correzione della coda non è un limite
+d'errore certificato. Questa seconda formula evita del tutto le
+derivate nella dimostrazione analitica.
+La somma è troncata e gli zeri sono calcolati con Newton in virgola
+mobile: è una verifica diagnostica di segni e costanti, non una
+certificazione degli zeri né una dimostrazione del limite.
+
+\section{Controllo formale parziale in Lean}\label{sec:leancheck}
+Il controllo del 9 ottobre 2026 usa Lean 4.24.0 e mathlib alla
+revisione \texttt{f897ebcf72cd16f89ab4577d0c826cd14afaafc7}.
+Il progetto contiene 33 teoremi espliciti, distribuiti in nove moduli.
+La compilazione e la rielaborazione diretta di tutti i sorgenti hanno
+avuto esito positivo, trattando anche gli avvisi come errori.
+L'audit delle dipendenze comprende 71 dichiarazioni di teoremi,
+contando gli ausiliari generati dalle tattiche: utilizza soltanto
+\texttt{propext}, \texttt{Classical.choice} e \texttt{Quot.sound},
+le usuali basi classiche di Lean/mathlib. Non compaiono dipendenze
+da lacune ammesse o assiomi matematici aggiunti.
+
+\paragraph{Passaggi verificati.}
+Il codice controlla il recupero di una coppia da somma e prodotto,
+l'ordinamento tramite il rapporto logaritmico, il principio di
+identità per la scelta di un fattore analitico su un aperto
+preconnesso e l'assegnazione esclusiva di uno zero semplice di un
+prodotto. Controlla inoltre il passaggio da un parametro comune
+a un unico orientamento quasi ovunque e l'uguaglianza delle
+misure definite dalle densità, assumendo esplicitamente le
+identità di somma, prodotto e trasporto. Quest'ultima affermazione
+non identifica ancora tali misure con le misure di area dei corpi.
+
+Per il nucleo di \eqref{eq:logproduct} è verificata la stima
+\[
+\begin{gathered}
+\left|R_{x,y}(\tau)+\frac{4\tau y}{x^2+\tau^2}\right|
+\leq\frac{36M^3\tau}{(x^2+\tau^2)^2}
+\leq\frac{36M^3}{\tau x^2},\\
+x\ne0,\quad |y|\leq M,\quad \tau>0,\quad \tau\geq4M.
+\end{gathered}
+\]
+Il codice usa quindi una costante e una soglia diverse da quelle
+più precise indicate dopo \eqref{eq:kernel}. Se $x_j\ne0$,
+$|y_j|\leq M$ e $\sum_jx_j^{-2}<\infty$, verifica la sommabilità
+dei resti e la stima
+\[
+\left|\sum_j\left[R_{x_j,y_j}(\tau)
+              +\frac{4\tau y_j}{x_j^2+\tau^2}\right]\right|
+\leq\frac{36M^3}{\tau}\sum_jx_j^{-2}\longrightarrow0.
+\]
+È verificata anche la separazione delle serie convergenti che dà
+\[
+\sum_jR_{x_j,y_j}(\tau)
++4\tau\sum_j\frac{y_j}{x_j^2+\tau^2}\longrightarrow0.
+\]
+Questo controllo fornisce un maggiorante $O(\tau^{-1})$ della
+somma dei resti, sufficiente al limite; non certifica il tasso
+più forte $O(\tau^{-2})$ indicato nel testo.
+
+Per la sostituzione delle parti reali è verificata la disuguaglianza
+\[
+\begin{gathered}
+\left|\frac{\tau}{x^2+\tau^2}
+       -\frac{\tau}{a^2+\tau^2}\right|
+\leq D\left(\frac1{x^2}+\frac1{a^2}\right),\\
+x,a,\tau>0,\quad |x-a|\leq D.
+\end{gathered}
+\]
+Applicando formalmente la convergenza dominata alle serie, il
+codice dimostra che la somma delle differenze, moltiplicate per
+coefficienti di modulo al più uno, tende a zero quando gli
+inversi dei quadrati di entrambe le successioni sono sommabili.
+Per gli errori sulle altezze è formalizzato l'argomento che
+separa una testa finita e una coda, assumendo pesi positivi e
+sommabili, massa limitata e convergenza a zero di ogni singolo peso.
+
+\paragraph{Obblighi non ancora verificati in Lean.}
+Non sono ancora formalizzati l'enunciato geometrico completo
+di \eqref{eq:target}, i risultati spettrali di Bianchi e la loro
+applicazione ai rami sulla sfera, la fattorizzazione di Hadamard
+con il passaggio al prodotto e ai logaritmi accoppiati, né i
+limiti di Laplace ricavati dalle sezioni. Rimane soprattutto da
+formalizzare il Lemma \ref{lem:roughcompetitor}: regolarità del
+supporto, assenza di parte singolare della misura di area,
+asintotica delle sezioni anche nei punti degeneri e recupero
+delle identità sulle densità. Restano inoltre il collegamento
+con i pesi specifici di \eqref{eq:universalmean}, la loro massa
+limite e la conclusione mediante l'unicità di Minkowski.
+I due lemmi centrali \ref{lem:roughcompetitor} e \ref{lem:mean}
+non sono pertanto certificati nella loro interezza.
+
+\paragraph{Ripetibilità e significato.}
+Il comando \texttt{./check.sh}, eseguito dalla cartella
+\texttt{formalizzazione}, ripete la verifica. Il relativo
+\texttt{README.md} elenca ipotesi, corrispondenze e obblighi
+residui; la sottocartella \texttt{verifica} conserva registri,
+versioni e impronte dei sorgenti controllati.
+Un lemma formalmente verificato rimane condizionato dalle ipotesi
+nel suo enunciato: l'audit degli assiomi non dimostra tali ipotesi
+per i corpi convessi. Il risultato qui registrato non autorizza
+quindi a descrivere la prova candidata dell'unicità come
+interamente verificata in Lean.
+
+\begin{thebibliography}{9}
+\bibitem{B16} G. Bianchi,
+\emph{The covariogram and Fourier--Laplace transform in $\mathbb C^n$},
+Proceedings of the London Mathematical Society 113 (2016), 1--23.
+\href{https://arxiv.org/abs/1312.7816}{arXiv:1312.7816}.
+\bibitem{AB07} G. Averkov, G. Bianchi,
+\emph{Retrieving convex bodies from restricted covariogram functions},
+Advances in Applied Probability 39 (2007), 613--629.
+\href{https://arxiv.org/abs/math/0702892}{arXiv:math/0702892}.
+\bibitem{B23} G. Bianchi, \emph{The covariogram problem},
+in Harmonic Analysis and Convexity (2023), 37--82.
+\href{https://people.dimai.unifi.it/bianchi/lavori/covariogram_survey14.pdf}{Manoscritto dell'autore}.
+\bibitem{Siu24} Y.-T. Siu,
+\emph{Weierstrass and Hadamard Factorization of Entire Functions},
+note del corso Math 213a, Harvard University, autunno 2024.
+\href{https://people.math.harvard.edu/~siu/math213a/weierstrass_and_hadamard_factorization_of_entire_function.pdf}{Note dell'autore}, p.~4.
+\end{thebibliography}
+\end{document}

@@ -1,0 +1,245 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath,amssymb,longtable,array}
+\usepackage[margin=26mm]{geometry}
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=blue]{hyperref}
+\title{Supplement S1\\Partial Lean Verification}
+\author{Andrea\\\small A curious amateur with proof obligations}
+\date{9 October 2026}
+\begin{document}
+\maketitle
+
+\noindent Accompanying \emph{Covariogram Uniqueness with One Regular Body in
+$\mathbb R^3$: A Candidate Proof via Area Measures and Fourier--Laplace Zeros}.
+This supplement and the Lean sources are separate from the mathematical paper.
+
+\section{What the verification establishes}
+The project contains 33 explicitly stated theorems in nine modules.
+All have been elaborated and checked by Lean 4.24.0, with warnings treated
+as errors. The transitive axiom audit covers 71 theorem declarations when
+automatically generated helpers are included. Only
+\texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}
+occur. No admitted proof or added mathematical axiom is used.
+The source checksums recorded with the successful run were rechecked
+while preparing the paper and still match.
+
+This certifies the statements with their declared hypotheses.
+It does not derive those hypotheses from equality of covariograms.
+In particular, the project does not yet contain a formal statement of the
+complete geometric uniqueness theorem, and neither central proposition
+of the paper has been fully formalized.
+
+\section{Correspondence with the mathematical paper}
+\begin{longtable}{@{}p{0.24\textwidth}p{0.07\textwidth}p{0.63\textwidth}@{}}
+\textbf{Module} & \textbf{Count} & \textbf{Checked content and scope}\\ \hline
+\endfirsthead
+\textbf{Module} & \textbf{Count} & \textbf{Checked content and scope}\\ \hline
+\endhead
+\path{Algebra} & 7 &
+Unordered pairs from sums and products, logarithmic ratios, choice of order,
+and the coefficient of the finite-difference kernel.
+Related to the end of Appendix A, Appendix C.1, and Section 4.\\[5pt]
+\path{AnalyticChoice} & 1 &
+The analytic identity argument on an open preconnected subset of a real
+normed space. Applying it to the spherical branches in Appendix B.1
+remains a separate task.\\[5pt]
+\path{ZeroAllocation} & 2 &
+Allocation of a simple product zero to exactly one factor, and exclusivity
+of the global analytic choice. The differentiation and simplicity data
+are hypotheses.\\[5pt]
+\path{LogKernel} & 6 &
+Normalization of the logarithmic kernel, a cubic remainder estimate,
+the denominator correction, and the bound with constant 36 in Appendix C.1.\\[5pt]
+\path{KernelSeries} & 5 &
+Summability and vanishing of the total remainder; the splitting of the
+convergent logarithmic and rational series. Bounded heights and summable
+inverse squares of real parts are explicit hypotheses.\\[5pt]
+\path{RealParts} & 3 &
+Replacement of real parts by a model at bounded distance, using a summable
+majorant and dominated convergence. Related to Appendix C.3.\\[5pt]
+\path{WeightedErrors} & 3 &
+Summability of bounded weighted sequences, the signed-mass bound, and the
+finite-head/tail limit argument of Appendix C.2 for abstract positive weights.\\[5pt]
+\path{LimitTransport} & 4 &
+A common scalar from prescribed directional limits; its modulus bound;
+the passage from local signs to one orientation almost everywhere.
+The directional asymptotic identity is assumed.\\[5pt]
+\path{MeasureConclusion} & 2 &
+Orientation of densities from sum, product and transport identities, and
+equality of the measures defined by these densities. Their identification
+with surface area measures and Minkowski uniqueness are not formalized.\\ \hline
+\end{longtable}
+
+The main paper uses a finite difference to remove the exponential
+coefficient in a Hadamard product. The checked algebraic kernel identity,
+logarithmic linearization and general limit arguments support this route;
+they do not constitute a formal proof of the entire finite-difference
+construction or of the normalized mean in Appendix D.
+
+\section{Representative checked statements}
+For real $x\ne0$, $|y|\le M$, $\tau>0$ and $\tau\ge4M$, Lean verifies
+\[
+ \left|\log\frac{x^2+(\tau-y)^2}{x^2+(\tau+y)^2}
+             +\frac{4\tau y}{x^2+\tau^2}\right|
+ \le\frac{36M^3\tau}{(x^2+\tau^2)^2}.
+\]
+For $x_n\ne0$, $|y_n|\le M$ and $\sum_nx_n^{-2}<\infty$, it verifies
+\[
+ \sum_n\log\frac{x_n^2+(\tau-y_n)^2}{x_n^2+(\tau+y_n)^2}
+       +4\tau\sum_n\frac{y_n}{x_n^2+\tau^2}\longrightarrow0.
+\]
+Both convergence of the needed series and the splitting used in this
+statement are checked.
+
+Another result concerns a full-support measure $\mu$ on a topological
+space and real functions $a,b,p,q,w$. With $a,b>0$ and $w\ne0$, put
+\[
+ \Gamma(a,b,w)=\frac{\log a-\log b}{2w}.
+\]
+Assume that $\Gamma(a,b,w)$ is continuous and that, almost everywhere,
+\[
+ p+q=a+b,\qquad pq=ab,\qquad
+ \Gamma(p,q,w)=c\,\Gamma(a,b,w)
+\]
+for one scalar $c$. Lean proves that either $(p,q)=(a,b)$ almost
+everywhere or $(p,q)=(b,a)$ almost everywhere. It then identifies the
+corresponding measures defined by densities. This result does not assert
+that an arbitrary convex competitor satisfies the three hypotheses.
+
+\section{Theorem inventory}
+All names below belong to the namespace \texttt{CovariogramCheck}.
+The files are in \path{formalizzazione/CovariogramCheck/}.
+
+\subsection*{Algebra.lean}
+{\small\begin{verbatim}
+pair_from_sum_product
+gamma_swap
+gamma_eq_zero_iff
+ordered_pair_from_gamma
+reversed_pair_from_gamma
+scalar_is_sign
+finite_difference_kernel
+\end{verbatim}}
+
+\subsection*{AnalyticChoice.lean and ZeroAllocation.lean}
+{\small\begin{verbatim}
+analytic_factor_choice
+simple_product_root_allocation
+analytic_factor_choice_exclusive
+\end{verbatim}}
+
+\subsection*{LogKernel.lean}
+{\small\begin{verbatim}
+log_ratio_cubic_remainder
+log_ratio_cubic_remainder_half
+logKernel_normalization
+logKernel_cubic_bound
+kernel_denominator_correction
+logKernel_uniform_remainder
+\end{verbatim}}
+
+\subsection*{KernelSeries.lean}
+{\small\begin{verbatim}
+logKernel_remainder_majorant
+logKernel_remainder_sum_bound
+logKernel_remainder_sum_tendsto_zero
+linearKernel_summable
+logKernel_sum_linearization
+\end{verbatim}}
+
+\subsection*{RealParts.lean}
+{\small\begin{verbatim}
+rationalKernel_difference_bound
+rationalKernel_tendsto_zero
+realParts_replacement_tendsto_zero
+\end{verbatim}}
+
+\subsection*{WeightedErrors.lean}
+{\small\begin{verbatim}
+summable_weighted_of_bounded
+signed_sum_bound
+weighted_errors_tendsto_zero
+\end{verbatim}}
+
+\subsection*{LimitTransport.lean}
+{\small\begin{verbatim}
+common_scalar_of_limits
+limit_abs_le_one
+scalar_is_sign_ae
+density_orientation_ae
+\end{verbatim}}
+
+\subsection*{MeasureConclusion.lean}
+{\small\begin{verbatim}
+density_orientation_of_sum_product_transport
+measure_orientation_of_sum_product_transport
+\end{verbatim}}
+
+\section{Unformalized dependencies}
+The following links remain outside the certification:
+\begin{enumerate}
+\item The geometric definitions and the derivation of difference-body,
+      brightness and Fourier--Laplace identities from equal covariograms.
+\item The support-regularity argument, the area formula as applied to
+      the whole surface area measure, and the section asymptotics in
+      Appendix A, including the singular quadratic case.
+\item The spectral results cited from Bianchi and their application to
+      the analytic branches on the sphere, including exceptional zeros.
+\item Hadamard factorization, the paired infinite product, and the
+      logarithmic identity for the actual transforms in Appendix B.
+\item The endpoint Laplace limits and their use to obtain positive
+      coefficients and products of area densities.
+\item The application of the abstract series estimates to all the
+      parameters in the paper, and normalization of the specific weights
+      in Appendix D.
+\item Identification of the density-defined measures with geometric
+      surface area measures, followed by Minkowski uniqueness and the
+      centrally symmetric case.
+\end{enumerate}
+Some underlying tools exist in mathlib, but their existence in the library
+does not amount to a formalized application to this problem.
+
+\section{Versions, records and repetition}
+The checked environment uses:
+\begin{itemize}
+\item Lean 4.24.0, commit
+      \path{797c613eb9b6d4ec95db23e3e00af9ac6657f24b};
+\item mathlib v4.24.0, commit
+      \path{f897ebcf72cd16f89ab4577d0c826cd14afaafc7}.
+\end{itemize}
+The initial successful run was recorded at 23:03:48 UTC on 8 October 2026
+(9 October in the author's local time). The current verification records
+include a subsequent run of the publication checking script; its exact
+time and environment are recorded in \path{versions.txt}.
+The directory \path{formalizzazione/verifica/} contains
+\path{build.log}, \path{kernel.log}, \path{axioms.log},
+\path{sources.sha256} and \path{versions.txt}.
+
+On the prepared local machine, running \path{formalizzazione/check.sh}
+builds the project, directly rechecks every source with warnings as errors,
+audits the transitive axioms, and writes the version and checksum records.
+The audit rejects any axiom other than the three named above.
+The option \texttt{autoImplicit = false} prevents undeclared identifiers
+from silently introducing extra implicit parameters.
+
+The current Lake configuration points to a local mathlib checkout in
+\path{.tools/mathlib4/} relative to the repository root. The checking script
+accepts Lean and Lake on the command path, or a binary directory specified
+by \texttt{LEAN\_BIN}, with a fallback for the original macOS arm64 setup.
+It checks the Lean version and mathlib revision before building.
+On another computer, these dependencies must first be provided at the
+pinned versions; the repository README gives the setup commands.
+With the matching Lean and Lake executables on the command path and
+mathlib in the configured location, the essential commands from
+\path{formalizzazione/} are:
+{\small\begin{verbatim}
+lake build
+lake env lean -DautoImplicit=false -DwarningAsError=true Audit.lean
+\end{verbatim}}
+Individual sources can be rechecked using the same \texttt{lake env lean}
+command and their filenames. A fresh-machine installation has not been
+tested as part of this manuscript preparation. No portability claim or
+certification of the whole candidate theorem is inferred from the local run.
+\end{document}

@@ -1,0 +1,243 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage[margin=26mm]{geometry}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue,citecolor=blue]{hyperref}
+\title{From Mathematical Exploration to a Candidate Proof:\\
+An Experiment in AI-Assisted Research on the\\
+Three-Dimensional Covariogram Problem}
+\author{Author details to be supplied}
+\date{9 October 2026 --- proposed structure for author approval}
+
+\begin{document}
+\maketitle
+
+\noindent\textbf{Editorial status.}
+This document proposes the title, abstract, section structure, and accompanying
+materials. It is not the completed paper. The full manuscript and public
+repository will be prepared after the author has approved this structure.
+The existing mathematical notebook remains a separate supporting document.
+
+\begin{abstract}
+We document an experiment in AI-assisted mathematical research led by an
+author who is neither a specialist in convex geometry nor a professional
+researcher in the field. Starting from the three-dimensional covariogram
+problem, the investigation combined literature study, exploratory arguments,
+symbolic and numerical diagnostics, and partial formalization in Lean. Its
+principal mathematical artifact is a candidate argument for the determination
+of a $C^9_+$ convex body in $\mathbb R^3$ among arbitrary convex competitors,
+up to translation and central reflection. The argument remains subject to
+expert review. Thirty-three supporting lemmas and conditional deductions have
+been checked in Lean; the complete uniqueness statement and essential
+geometric and spectral links have not been formalized. The contribution of
+this report is a documented research process and an inspectable collection
+of mathematical artifacts, rather than an established solution of the open
+case. We examine the opportunities and limits illustrated by this experience
+and ask what domain experts might achieve by combining these tools with
+specialist judgment. A single exploratory case cannot establish general
+productivity gains, correctness, or mathematical novelty, but it motivates
+systematic investigation of this research methodology.
+\end{abstract}
+
+\section{Introduction: Research Assistance Beyond Specialist Expertise}
+\paragraph{Purpose.}
+Explain the author's position, the motivation for attempting a difficult
+problem outside the author's professional research field, and the methodological
+question that motivates the paper. Describe the experiment as a case study,
+without implying that specialist knowledge has become unnecessary.
+
+\paragraph{Central question.}
+\emph{If an author without specialist expertise can use AI tools to develop
+an inspectable candidate argument and formally check some of its components,
+what might a domain expert achieve by combining the same tools with deeper
+knowledge and stronger mathematical judgment?}
+
+The introduction will distinguish observed outcomes from expectations about
+future tools and expert practice. Related work on AI-assisted mathematics and
+formal proof will be added after a focused literature review; no claim of
+priority for the methodology is made in this outline.
+
+\section{The Mathematical Case: A Precise Covariogram Uniqueness Question}
+Introduce a convex body as a compact convex subset of $\mathbb R^3$ with
+nonempty interior, and define
+\[
+ g_K(x)=\operatorname{Vol}_3\bigl(K\cap(K+x)\bigr).
+\]
+Explain translation and central-reflection invariance. State the target
+precisely:
+\[
+\begin{gathered}
+ K\in C^9_+,\qquad L\subset\mathbb R^3\text{ an arbitrary convex body},
+ \qquad g_K=g_L,\\
+ \Longrightarrow\quad
+ \exists v\in\mathbb R^3:\quad L=v+K\ \text{or}\ L=v-K.
+\end{gathered}
+\]
+Here $C^9_+$ denotes $C^9$ boundary regularity with positive Gaussian curvature;
+no boundary regularity is imposed on $L$. Locate this question relative to
+Bianchi's results and the extension discussed in his survey
+\cite{Bianchi2016,Bianchi2023}. Distinguish the historical statement that the
+case was reported open from any claim about its current status or the novelty
+of the present candidate.
+
+\section{Experimental Setting and Human--AI Collaboration}
+Describe the actual tools and available records, the human choice of problems
+and constraints, and the AI's contributions to literature exploration,
+argument generation, criticism, computation, formalization, and writing.
+Separate recorded actions from retrospective interpretation.
+
+Report model and software versions only where recoverable, with any missing
+metadata identified explicitly. Explain what can be reproduced from the
+repository and what cannot be recreated from an interactive session. The
+experiment is observational, not a controlled comparison of human and AI
+performance.
+
+\section{Development of the Candidate Argument}
+Reconstruct the investigation from the broad three-dimensional problem to
+the target with one regular body and an arbitrary competitor. Include the
+main explored approaches, discarded or insufficient arguments, changes in
+scope, and reasons for selecting the final route.
+
+Identify concrete benefits of the workflow that are supported by the records:
+organizing dependencies, producing explicit calculations, constructing
+diagnostics, and exposing the difference between an informal argument and
+formal verification. Do not convert the apparent fluency or length of an
+argument into evidence of correctness.
+
+\section{The Candidate Proof and Its Dependencies}
+Give a readable account of the mathematical argument, with the complete
+proposed derivations in Appendix~\ref{app:proof}. Use explicit status labels
+for cited results, proposed lemmas, checked components, and remaining
+verification obligations.
+
+\subsection{Information Recovered from the Covariogram}
+Describe the proposed chain from equal covariograms to the difference body,
+projection data, and identities for Fourier--Laplace transforms. State the
+external results used and their exact hypotheses.
+
+\subsection{The Arbitrary Competitor: Support Regularity and Area Densities}
+Present the proposed lemma concerning the support function of $L$, its
+almost-everywhere quadratic data, the absence of a singular part of the area
+measure, and endpoint section asymptotics, including degenerate cases.
+Flag this as a principal target for expert scrutiny.
+
+\subsection{Fourier--Laplace Zeros and a Common Orientation Parameter}
+Describe the use of Bianchi's zero branches, factor allocation, Hadamard
+factorization, logarithmic kernels, and weighted limits. Separate the
+formalized analytic estimates from the unformalized derivation of their
+hypotheses for the geometric problem.
+
+\subsection{Conditional Completion Through Area Measures}
+Explain the proposed recovery of globally ordered area densities and the
+conclusion via Minkowski uniqueness. Do not describe this final chain as
+established merely because some of its conditional steps have been checked.
+
+\section{Verification: Evidence, Formal Coverage, and Remaining Obligations}
+\subsection{Symbolic and Numerical Diagnostics}
+Describe the rational-arithmetic checks and the truncated numerical
+experiments, including precisely what they test and what they do not certify.
+Preserve the distinction between numerical agreement and proof.
+
+\subsection{Partial Verification in Lean}
+Document the 33 explicit theorems in nine modules, their hypotheses, the
+Lean/mathlib versions, and the successful compilation and axiom audit.
+Explain that the usual foundational axioms are used, with no admitted proofs
+or additional mathematical axioms. Include the verified logarithmic
+remainder estimates, convergence arguments, and conclusions about densities.
+
+\subsection{What Has Not Been Verified}
+List the missing geometric and spectral links, the full factorization and
+Laplace argument, the application to the specific weights, and the geometric
+uniqueness conclusion. State prominently that neither central candidate
+lemma is certified in its entirety and that theorem counts do not measure
+distance to a complete proof.
+
+\section{Methodological Lessons and Prospects for Expert Research}
+Discuss the possible role of AI tools in lowering the cost of exploration,
+organizing proof obligations, and connecting informal arguments to formal
+proof assistants. Interpret these as possibilities illustrated by the case,
+not measured general improvements.
+
+Explain where expert knowledge may be especially valuable: detecting missing
+hypotheses, recognizing existing results, selecting feasible approaches, and
+rejecting persuasive but invalid arguments. Address limitations, including
+selection bias, the absence of a comparison group, incomplete interaction
+records, and the time required for independent validation.
+
+\section{Reproducibility, Expert Review, and Next Steps}
+Specify the public repository contents, the commands for repeating the
+checks, and the correspondence between paper claims and source files.
+The present Lean setup uses local tool and library paths; portable setup
+instructions are a release requirement, not an already completed feature.
+
+Set out the intended review process: independent assessment of the candidate
+lemmas, further verification of bibliographic status, and extension of the
+formalization. Record any future corrections and expert feedback transparently.
+A planned request for Bianchi's assessment must not be represented as an
+endorsement or as a review already received.
+
+\section{Conclusion}
+Summarize the methodological artifact produced by the experiment and the
+precise mathematical status of the candidate. Return to the question of what
+specialists might accomplish with these tools. The methodological record
+remains informative if expert review later requires substantial corrections
+or rejects the candidate; it must not depend on advertising an unverified
+solution.
+
+\section*{Author Contributions and Disclosure of AI Assistance}
+Describe the human author's role and the substantial assistance used in
+research, drafting, computation, and formalization. Identify tools and models
+where the records support doing so. State human responsibility for the
+manuscript and its claims. Author name, affiliation or independent status,
+repository URL, acknowledgments, and licenses remain to be supplied or agreed
+before release.
+
+\appendix
+\section{Detailed Candidate Argument}\label{app:proof}
+Provide the English technical account with all proposed derivations,
+dependencies, and unresolved verification obligations. Preserve the original
+Italian notebook as a separate, dated research artifact rather than silently
+replacing it with a polished retrospective account.
+
+\section{Lean Theorems and Coverage Map}
+Map each theorem name and module to the corresponding mathematical step,
+including its premises. Include the audit output, version information, and
+source checksums. Distinguish rerunning the verification from establishing
+that the formal statements cover the intended uniqueness theorem.
+
+\section{Computational Diagnostics}
+Document the symbolic and numerical scripts, inputs, outputs, truncation
+choices, and limitations. Relate them to the exact statements investigated
+in the notebook and the paper.
+
+\section{Repository Guide and Research Record}
+The release is intended to contain the following materials:
+\begin{itemize}
+\item The English paper source and a compiled reading copy.
+\item The original mathematical notebook and its verification notes.
+\item The Lean sources, pinned dependencies, portable setup instructions,
+      build script, axiom audit, and verification logs.
+\item The rational and numerical diagnostic scripts with instructions.
+\item The bibliography register, a record of the available research stages,
+      and a correction history.
+\end{itemize}
+Downloaded toolchains, dependency caches, machine-specific absolute paths,
+and private session metadata are not intended as public repository content.
+Any unavailable interaction history will be reported as unavailable, not
+reconstructed as though it were a verbatim record.
+
+\begin{thebibliography}{9}
+\bibitem{Bianchi2016}
+G.~Bianchi, \emph{The covariogram and Fourier--Laplace transform in
+$\mathbb C^n$}, Proceedings of the London Mathematical Society
+113 (2016), 1--23.
+\href{https://arxiv.org/abs/1312.7816}{arXiv:1312.7816}.
+
+\bibitem{Bianchi2023}
+G.~Bianchi, \emph{The covariogram problem}, in
+\emph{Harmonic Analysis and Convexity} (2023), 37--82.
+\href{https://people.dimai.unifi.it/bianchi/lavori/covariogram_survey14.pdf}{Author's manuscript}.
+\end{thebibliography}
+\end{document}

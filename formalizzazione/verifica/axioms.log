@@ -1,0 +1,53 @@
+CovariogramCheck.density_orientation_ae: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.summable_weighted_of_bounded: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.logKernel_remainder_sum_tendsto_zero: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.rationalKernel_tendsto_zero: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.weighted_errors_tendsto_zero: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.ordered_pair_from_gamma: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.analytic_factor_choice: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.kernel_denominator_correction: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.finite_difference_kernel: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.scalar_is_sign_ae: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.log_ratio_cubic_remainder_half: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.density_orientation_of_sum_product_transport: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.logKernel_sum_linearization: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.logKernel_cubic_bound: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.signed_sum_bound: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.pair_from_sum_product: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.simple_product_root_allocation: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.logKernel_remainder_majorant: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.logKernel_uniform_remainder: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.common_scalar_of_limits: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.logKernel_normalization: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.logKernel_remainder_sum_bound: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.scalar_is_sign: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.measure_orientation_of_sum_product_transport: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.realParts_replacement_tendsto_zero: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.linearKernel_summable: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.rationalKernel_difference_bound: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.limit_abs_le_one: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.reversed_pair_from_gamma: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.gamma_swap: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.analytic_factor_choice_exclusive: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.gamma_eq_zero_iff: [propext, Classical.choice, Quot.sound]
+CovariogramCheck.log_ratio_cubic_remainder: [propext, Classical.choice, Quot.sound]
+AUDIT OK: 33 public theorems (71 including generated helpers); only propext, Classical.choice, Quot.sound allowed.
+CovariogramCheck.logKernel_sum_linearization (x y : ℕ → ℝ) (M : ℝ) (hx : ∀ (n : ℕ), x n ≠ 0) (hy : ∀ (n : ℕ), |y n| ≤ M)
+  (hs : Summable fun n => 1 / x n ^ 2) :
+  Filter.Tendsto
+    (fun t => ∑' (n : ℕ), CovariogramCheck.logKernel (x n) (y n) t + 4 * t * ∑' (n : ℕ), y n / (x n ^ 2 + t ^ 2))
+    Filter.atTop (nhds 0)
+CovariogramCheck.realParts_replacement_tendsto_zero (x a e : ℕ → ℝ) (D : ℝ) (hx : ∀ (n : ℕ), 0 < x n)
+  (ha : ∀ (n : ℕ), 0 < a n) (hd : ∀ (n : ℕ), |x n - a n| ≤ D) (he : ∀ (n : ℕ), |e n| ≤ 1)
+  (hsx : Summable fun n => 1 / x n ^ 2) (hsa : Summable fun n => 1 / a n ^ 2) :
+  Filter.Tendsto (fun t => ∑' (n : ℕ), e n * (t / (x n ^ 2 + t ^ 2) - t / (a n ^ 2 + t ^ 2))) Filter.atTop (nhds 0)
+CovariogramCheck.measure_orientation_of_sum_product_transport.{u_1} {U : Type u_1} [TopologicalSpace U]
+  [MeasurableSpace U] (μ : MeasureTheory.Measure U) [μ.IsOpenPosMeasure] (a b p q w : U → ℝ) (c : ℝ)
+  (ha : ∀ (u : U), 0 < a u) (hb : ∀ (u : U), 0 < b u) (hw : ∀ (u : U), w u ≠ 0)
+  (hg : Continuous fun u => CovariogramCheck.gamma (a u) (b u) (w u)) (hs : ∀ᵐ (u : U) ∂μ, p u + q u = a u + b u)
+  (hp : ∀ᵐ (u : U) ∂μ, p u * q u = a u * b u)
+  (ht : ∀ᵐ (u : U) ∂μ, CovariogramCheck.gamma (p u) (q u) (w u) = c * CovariogramCheck.gamma (a u) (b u) (w u)) :
+  (((μ.withDensity fun u => ENNReal.ofReal (p u)) = μ.withDensity fun u => ENNReal.ofReal (a u)) ∧
+      (μ.withDensity fun u => ENNReal.ofReal (q u)) = μ.withDensity fun u => ENNReal.ofReal (b u)) ∨
+    ((μ.withDensity fun u => ENNReal.ofReal (p u)) = μ.withDensity fun u => ENNReal.ofReal (b u)) ∧
+      (μ.withDensity fun u => ENNReal.ofReal (q u)) = μ.withDensity fun u => ENNReal.ofReal (a u)

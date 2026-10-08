@@ -1,0 +1,881 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=27mm]{geometry}
+\usepackage{microtype}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{candidate}[theorem]{Candidate theorem}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\Sph}{\mathbb S^2}
+\newcommand{\vol}{\operatorname{Vol}_3}
+\newcommand{\area}{\mathcal H^2}
+\newcommand{\F}{\mathcal F}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\id}{\operatorname{Id}}
+\DeclareMathOperator{\Rea}{Re}
+\DeclareMathOperator{\Ima}{Im}
+\numberwithin{equation}{section}
+\title{Covariogram Uniqueness with One Regular Body in $\R^3$\\[3pt]
+\large A Candidate Proof via Area Measures and Fourier--Laplace Zeros}
+\author{Andrea\\[2pt]\small A curious amateur with proof obligations}
+\date{9 October 2026\\\small Working draft for mathematical review}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+Does the covariogram of a $C^9_+$ convex body in $\R^3$ determine it among
+all convex bodies, without a regularity assumption on the competitor?
+This extension is explicitly identified as open in Bianchi's survey.
+We present a candidate proof based on two proposed steps. First, the common
+difference body yields a $C^{1,1}$ support function for the competitor;
+quadratic data almost everywhere and Laplace asymptotics then recover
+unordered antipodal area densities. Second, analytic allocation of the
+regular body's Fourier--Laplace zeros and a positive weighted limit impose
+one common orientation on these densities. Minkowski uniqueness supplies
+the final implication. The main text states the argument and its dependencies;
+the appendices give the detailed proposed proofs. This is a submission for
+independent scrutiny, not a claim of a validated solution. A separate
+supplement records partial Lean verification, which does not certify the
+two central propositions or the complete uniqueness theorem.
+\end{abstract}
+
+\section{Introduction and purpose}\label{sec:introduction}
+The problem addressed here was chosen because it was explicitly declared
+open. Bianchi's uniqueness theorem applies when both bodies have sufficiently
+regular boundaries \cite[Theorem~1.1 and Remark~5.2]{Bianchi2016}. In dimension
+three the hypothesis is $C^9_+$. His survey identifies the remaining question:
+whether such a body is determined among \emph{all} convex bodies
+\cite[discussion following Theorem~3.25, manuscript p.~23]{Bianchi2023}.
+The absence of a regularity hypothesis on the second body is the issue in
+this paper.
+
+The investigation began as an experiment in AI-assisted mathematical
+exploration by an author outside professional research in convex geometry.
+Its purpose is to bring the resulting candidate argument to a form that
+a specialist can evaluate. The experience also motivates a broader question:
+what could an expert accomplish by combining these tools with the knowledge
+needed to choose productive directions and detect subtle errors?
+The interaction record and computational artifacts belong to the accompanying
+research materials; the present paper concentrates on the mathematics.
+
+A convex body is a compact convex set with nonempty interior. Its
+covariogram is
+\begin{equation}\label{eq:covariogram}
+ g_C(x)=\vol(C\cap(C+x))
+       =\int_{\R^3}\mathbf1_C(y)\mathbf1_C(y-x)\,dy .
+\end{equation}
+Translations and central reflections preserve this function. We write
+$C\in C^r_+$ when $\partial C$ is $C^r$ and has positive Gaussian curvature.
+The precise proposed conclusion is the following.
+
+\begin{candidate}\label{thm:target}
+Let $K\subset\R^3$ be a convex body of class $C^9_+$, and let
+$L\subset\R^3$ be an arbitrary convex body. If $g_L=g_K$, then
+\[
+ L=v+K\qquad\text{or}\qquad L=v-K
+ \quad\text{for some }v\in\R^3 .
+\]
+\end{candidate}
+
+The proposed proof has two substantive components:
+Proposition~\ref{prop:geometric} transfers geometric information to the
+possibly nonsmooth competitor; Proposition~\ref{prop:transport} uses only
+the regular body's spectral information to make the orientation global.
+Their detailed arguments are given in Appendices~\ref{app:geometry}--\ref{app:mean}.
+Section~\ref{sec:completion} shows exactly how they imply the candidate
+theorem. These two propositions are submitted for review as proposed
+steps, rather than cited as established results.
+
+The target is the extension identified in the cited literature. The
+bibliographic investigation recorded with the research materials found
+no subsequent resolution in the sources consulted as of 9 October 2026;
+this is not an exhaustive priority claim. The argument does not address
+an arbitrary first body, and no lower-regularity extension is asserted here.
+
+\section{Geometric reduction for the competitor}\label{sec:geometry}
+Let $h_C$ denote the positively homogeneous support function of $C$ and set
+\begin{align}
+ \alpha_C(u)&=-h_C(-u),&
+ \beta_C(u)&=h_C(u),&
+ w_C(u)&=\beta_C(u)-\alpha_C(u),\label{eq:endpoints}\\
+ A_C(u,t)&=\area(C\cap\{x:x\cdot u=t\}),&&u\in\Sph .\label{eq:sections}
+\end{align}
+We use $\sigma=\area|_{\Sph}$, and $S_C$ denotes the surface area measure.
+For a $C^2_+$ body,
+\begin{equation}\label{eq:radii}
+ R_C(u)=\nabla_{\Sph}^2h_C(u)+h_C(u)\id,\qquad
+ f_C(u)=\det R_C(u)=\kappa_C(u)^{-1},\qquad dS_C=f_C\,d\sigma .
+\end{equation}
+Determinants are taken on the two-dimensional tangent plane.
+For a $C^{1,1}$ support function, $R_C$ is interpreted almost everywhere.
+
+Equal covariograms give the same difference body and volume:
+\begin{equation}\label{eq:difference}
+ D:=K-K=L-L,\qquad w_K=w_L=:w,\qquad \vol(K)=\vol(L).
+\end{equation}
+Indeed $\supp g_C=C-C$, with support understood as the closure of the
+nonzero set, and $g_C(0)=\vol(C)$.
+Define the entire transform
+\begin{equation}\label{eq:transform}
+ \F_C(z)=\int_C e^{iz\cdot x}\,dx,\qquad z\in\C^3 .
+\end{equation}
+The convolution identity in \eqref{eq:covariogram} yields
+\begin{equation}\label{eq:product}
+ \F_L(z)\F_L(-z)=\F_K(z)\F_K(-z),\qquad z\in\C^3.
+\end{equation}
+The scalar restrictions also satisfy
+\begin{equation}\label{eq:reality}
+ \F_C(-\overline\zeta u)=\overline{\F_C(\zeta u)},\qquad
+ \F_C(i\tau u)>0\quad(\tau\in\R).
+\end{equation}
+
+\begin{proposition}[Geometric transfer; proposed]\label{prop:geometric}
+Suppose $K\in C^2_+$ and $g_L=g_K$, with $L$ an arbitrary convex body.
+Then $h_L\in C^{1,1}_{\mathrm{loc}}(\R^3\setminus\{0\})$ and
+\begin{equation}\label{eq:areaL}
+ dS_L=f_L\,d\sigma,\qquad f_L(u)=\det R_L(u).
+\end{equation}
+For almost every $u$, $R_L(u)$ and $R_L(-u)$ are positive definite and
+\begin{equation}\label{eq:unordered}
+ \{f_L(u),f_L(-u)\}=\{f_K(u),f_K(-u)\}.
+\end{equation}
+At such directions the endpoint expansions are
+\begin{align}
+ A_L(u,\alpha_L+s)&=a_L(u)s+o(s),&
+ a_L(u)&=2\pi\sqrt{f_L(-u)},\label{eq:lower}\\
+ A_L(u,\beta_L-s)&=b_L(u)s+o(s),&
+ b_L(u)&=2\pi\sqrt{f_L(u)},\label{eq:upper}
+\end{align}
+as $s\downarrow0$.
+\end{proposition}
+
+The proposed argument first uses $0\le D^2h_L\le D^2h_D$ in the sense
+of matrix-valued measures. This gives a Lipschitz map
+$u\mapsto\nabla h_L(u)$ and, through the area formula, the entire measure
+identity \eqref{eq:areaL}. An endpoint section calculation then gives
+\eqref{eq:lower}--\eqref{eq:upper}, initially with nonnegative coefficients.
+The imaginary-axis identity \eqref{eq:product} forces their product to
+equal the strictly positive product for $K$. Finally, the directional
+derivatives of $g_C$ at zero recover the even part of $S_C$.
+Thus products and sums recover \eqref{eq:unordered}.
+Appendix~\ref{app:geometry} supplies the details, including degenerate
+quadratic forms and the possible singular part of $S_L$.
+
+\section{A common orientation from the spectral data}\label{sec:spectral}
+For the regular body define the continuous odd function
+\begin{equation}\label{eq:gammaK}
+ \gamma_K(u)=\frac{\log f_K(u)-\log f_K(-u)}{2w(u)} .
+\end{equation}
+The spectral input used below is Bianchi's extension of Kobayashi's
+description of the zeros \cite[Theorems~4.1--4.2]{Bianchi2016}.
+For $K\in C^9_+$, there are real-analytic branches
+$z_m:\Sph\to\C$, for all sufficiently large integers $m$, such that
+\begin{equation}\label{eq:rootsK}
+ z_m(u)=\frac{(2m+1)\pi}{w(u)}+i\gamma_K(u)+O(m^{-1})
+\end{equation}
+uniformly in $u$. They are distinct simple zeros of
+$\zeta\mapsto\F_K(\zeta u)$ with positive real part.
+The remaining zeros with positive real part lie in a bounded set common
+to all directions, and are finite in number in each fixed direction,
+counted with multiplicity. Simplicity and the uniform bound also appear
+in the proof of the cited Theorem~4.2, in particular its equation~(4.16).
+
+If $K$ is not centrally symmetric, then $\gamma_K\not\equiv0$.
+Otherwise $S_K$ is even, and Minkowski uniqueness gives a translate of
+$-K$ equal to $K$.
+
+\begin{proposition}[Transport of endpoint ratios; proposed]\label{prop:transport}
+Let $K\in C^9_+$ be noncentrally symmetric and let $g_L=g_K$.
+Assume that \eqref{eq:lower}--\eqref{eq:upper} hold with positive
+finite coefficients on a set of full $\sigma$-measure.
+Then there is a unique $c\in[-1,1]$, independent of direction, such that
+\begin{equation}\label{eq:transport}
+ \gamma_L(u):=\frac{\log(b_L(u)/a_L(u))}{w(u)}
+             =c\gamma_K(u)\quad\text{for almost every }u.
+\end{equation}
+\end{proposition}
+
+Here is the mechanism. The analytic functions
+$\F_L(z_m(u)u)$ and $\F_L(-z_m(u)u)$ have identically zero product.
+Analytic continuation and simplicity therefore allocate each sufficiently
+large branch to one factor globally. Consequently, a sequence
+$\varepsilon_m\in\{-1,1\}$ independent of $u$ describes the positive-real-part
+zeros of the competitor, apart from finitely many:
+\begin{equation}\label{eq:rootsL}
+ \zeta_{m,L}=x_m+iy_m,\qquad
+ x_m=\frac{(2m+1)\pi}{w}+O(m^{-1}),\qquad
+ y_m=\varepsilon_m\gamma_K(u)+O(m^{-1}).
+\end{equation}
+The allocation, including real zeros, is justified in Appendix~\ref{app:allocation}.
+
+For a fixed admissible direction write $F(\zeta)=\F_L(\zeta u)$ and define
+\begin{equation}\label{eq:DH}
+ D_L(\tau)=\log F(i\tau)-\log F(-i\tau),\qquad
+ H_L(\tau)=D_L(2\tau)-2D_L(\tau).
+\end{equation}
+Endpoint Laplace asymptotics give
+$H_L(\tau)\to\log(b_L/a_L)$. The finite difference cancels the linear
+exponential term in a Hadamard product. Pairing the zeros as
+$x_j+iy_j,-x_j+iy_j$ and using the estimates in Appendix~\ref{app:kernels}
+gives
+\begin{equation}\label{eq:Hkernel}
+ H_L(\tau)=
+ \sum_j\frac{24y_j\tau^3}
+ {(x_j^2+\tau^2)(x_j^2+4\tau^2)}+o(1).
+\end{equation}
+After \eqref{eq:rootsL} and the rescaling $\tau=2\pi R/w(u)$,
+\begin{equation}\label{eq:Hmean}
+ H_L(2\pi R/w(u))=w(u)\gamma_K(u)N(R)+o(1),
+\end{equation}
+where
+\begin{equation}\label{eq:mean}
+ N(R)=\frac{12}{\pi}\sum_{m\ge m_0}
+ \frac{\varepsilon_m R^3}
+ {((m+\tfrac12)^2+R^2)((m+\tfrac12)^2+4R^2)} .
+\end{equation}
+The weights are positive and have total mass tending to one.
+One admissible direction with $\gamma_K(u)\ne0$ forces $N(R)$ to have
+a limit $c$. The same sequence $N$ then gives \eqref{eq:transport} in
+every admissible direction. Appendix~\ref{app:mean} proves these assertions
+without differentiating an infinite series.
+
+\section{Completion of the candidate argument}\label{sec:completion}
+Assume the two proposed propositions with their proofs in the appendices.
+If $K$ is noncentrally symmetric, Proposition~\ref{prop:geometric} gives
+the hypotheses of Proposition~\ref{prop:transport} and
+\begin{equation}\label{eq:localsign}
+ \gamma_L(u)\in\{\gamma_K(u),-\gamma_K(u)\}
+ \quad\text{almost everywhere}.
+\end{equation}
+Because $\gamma_K$ is continuous and nonzero somewhere, its nonzero set
+contains a nonempty open set. This set meets the full-measure set where
+\eqref{eq:transport} and \eqref{eq:localsign} both hold, so $c=1$ or $c=-1$.
+
+If $c=1$, the ordered logarithmic ratio and the unordered pair
+\eqref{eq:unordered} imply $f_L(u)=f_K(u)$ almost everywhere.
+If $c=-1$, they imply $f_L(u)=f_K(-u)$ almost everywhere.
+Where the two values of $f_K$ coincide there is no choice to make.
+Identity \eqref{eq:areaL} is an identity of the complete measures, hence
+$S_L=S_K$ or $S_L=S_{-K}$. The uniqueness part of Minkowski's theorem
+\cite{Schneider} gives the desired translation or central reflection.
+
+If $K$ is centrally symmetric, \eqref{eq:difference} gives
+$\vol(D)=8\vol(K)=8\vol(L)$. Equality therefore holds in the
+Brunn--Minkowski inequality for $L+(-L)$. Its equality case implies that
+$L$ and $-L$ are homothetic; their equal volumes make them translates.
+Thus $L$ is centrally symmetric, and the common difference body determines
+both bodies up to translation. This completes the proposed deduction of
+Candidate Theorem~\ref{thm:target}.
+
+\section{Scope of verification and accompanying materials}\label{sec:verification}
+The mathematical claims requiring scrutiny are the geometric transfer in
+Appendix~\ref{app:geometry} and the spectral transport through
+Appendices~\ref{app:allocation}--\ref{app:mean}. Particular attention is
+needed at the area-formula step, the degenerate endpoint calculation,
+the allocation of multiplicities, and the passage from the canonical
+product to the directional limit. No regularity of $L$ is assumed in
+these arguments beyond what is explicitly derived.
+
+Supplement S1 records 33 supporting lemmas and conditional deductions
+checked in Lean 4.24.0. It includes the exact statements, dependencies,
+and limits of that verification. Neither Proposition~\ref{prop:geometric}
+nor Proposition~\ref{prop:transport}, nor the complete candidate theorem,
+has been formally certified. Supplement S2 describes numerical diagnostics.
+All mathematical steps needed to assess the candidate are written here;
+the reader need not inspect Lean code or the interaction history.
+
+\paragraph{AI assistance.}
+AI tools assisted substantially in exploration, drafting, computation and
+partial formalization. The source files, verification records and available
+research documentation are separate accompanying materials. Their purpose
+is to make the work inspectable; responsibility for the submitted claims
+remains with the human author.
+
+\appendix
+\section{Geometric transfer and endpoint sections}\label{app:geometry}
+This appendix gives the proposed proof of Proposition~\ref{prop:geometric}.
+The external tools are the differentiability and area theorems for Lipschitz
+maps, standard convex duality, and the classical area-measure results in
+convex geometry; see \cite{EvansGariepy,Schneider}. Their applications to
+the present competitor are made explicit below.
+
+\subsection{The support function and the complete area measure}
+Since $K\in C^2_+$, its homogeneous support function is $C^2$ away from
+zero. The same is true of $h_D=h_K+h_{-K}$. Convexity gives positive
+semidefinite distributional Hessians and
+\begin{equation}\label{eq:hessian-domination}
+ 0\le D^2h_L\le D^2h_D,\qquad h_D=h_L+h_{-L}.
+\end{equation}
+On a relatively compact ball away from zero, $D^2h_D$ is a bounded
+continuous matrix field. Domination of the quadratic forms in
+\eqref{eq:hessian-domination} first bounds the diagonal measures of
+$D^2h_L$ by a multiple of Lebesgue measure; polarization then bounds
+the off-diagonal entries as well. Thus the weak Hessian of $h_L$ is
+locally $L^\infty$. Equivalently, mollification on a slightly larger
+ball gives uniformly bounded positive semidefinite Hessians and uniformly
+Lipschitz gradients. Passing to the limit shows that the continuous
+convex representative $h_L$ is $C^{1,1}$.
+
+Every support face of $L$ is consequently a singleton. Write
+$p_L(u)=\nabla h_L(u)$. This map is Lipschitz on the compact sphere
+and maps it onto $\partial L$, because every boundary point admits
+a supporting normal. Almost everywhere,
+\[
+ Dp_L(u)|_{u^\perp}=R_L(u)
+   =\nabla_{\Sph}^2h_L(u)+h_L(u)\id\succeq0 .
+\]
+The tangential two-dimensional Jacobian is $\det R_L(u)$.
+
+Let $\partial L_{\rm reg}$ be the set of boundary points with a unique
+outer unit normal $\nu_L(x)$. The complement has $\area$-measure zero.
+For a Borel set $E\subset\Sph$, the multiplicity of the map $p_L|_E$
+at a point $x\in\partial L_{\rm reg}$ is exactly
+$\mathbf1_E(\nu_L(x))$: every preimage is a supporting normal at $x$,
+and the normal is unique. The area formula therefore gives
+\begin{align}
+ \int_E\det R_L(u)\,d\sigma(u)
+ &=\int_{\partial L}\#\{u\in E:p_L(u)=x\}\,d\area(x)\notag\\
+ &=\int_{\partial L_{\rm reg}}\mathbf1_E(\nu_L(x))\,d\area(x)
+ =S_L(E).\label{eq:area-formula}
+\end{align}
+The integral over the nonregular boundary is zero, even if its
+pointwise multiplicity is infinite. This proves the identity of the
+whole measure in \eqref{eq:areaL}, and not merely a formula for an
+absolutely continuous part.
+
+\subsection{The section coefficient at a quadratic direction}\label{app:sections}
+Rademacher's theorem applied to the Lipschitz gradient, in a finite
+collection of local charts, gives a second-order expansion of $h_L$
+at almost every direction. Indeed, integration of the first-order
+expansion of the gradient along a segment gives the quadratic Taylor
+formula. Intersect this full-measure set with its antipodal image.
+
+Fix a direction in this set. Rotate it to $e_3$, and translate its
+support point to zero. Write a point of $\R^3$ as $(y,z)$, with
+$y\in\R^2$. Then $\beta_L(e_3)=0$ and
+\begin{equation}\label{eq:G-expansion}
+ G(v):=h_L(v,1)=\tfrac12v^TRv+o(|v|^2),\qquad
+ R=R_L(e_3)\succeq0 .
+\end{equation}
+We claim that
+\begin{equation}\label{eq:section-coefficient}
+ \lim_{s\downarrow0}\frac{A_L(e_3,-s)}s
+   =2\pi\sqrt{\det R},
+\end{equation}
+including the case $\det R=0$.
+
+The support face at height zero is the singleton $\{0\}$. Compactness
+therefore implies that all points of the sections at height $-s$
+tend to zero as $s\downarrow0$. Choose $C>0$ so that
+$G(v)\le C|v|^2$ near zero. The support inequality for $(y,-s)\in L$ is
+$v\cdot y-s\le G(v)$. For small sections we may choose $v=y/(2C)$,
+which gives
+\begin{equation}\label{eq:section-bound}
+ |y|^2\le4Cs.
+\end{equation}
+Thus the rescaled planar sets
+$E_s=\{Y:(\sqrt{s}Y,-s)\in L\}$ lie in a common disk.
+
+Suppose first that $R$ is singular. If $s_j\downarrow0$ and
+$Y_j\in E_{s_j}$ converge to $Y$, substitute $v=\sqrt{s_j}V$
+in the support inequality and divide by $s_j$ to obtain
+\begin{equation}\label{eq:limit-support}
+ V\cdot Y-1\le\tfrac12 V^TRV\qquad(V\in\R^2).
+\end{equation}
+For $V$ an arbitrary real multiple of a vector in $\ker R$, this forces
+$Y\perp\ker R$, that is, $Y\in\operatorname{im}R$.
+Every limit point of the bounded sets $E_s$ lies in a subspace of
+dimension at most one. For each $\delta>0$, these sets must eventually
+lie in the $\delta$-neighborhood of this subspace within the common
+disk: otherwise a convergent subsequence would contradict
+\eqref{eq:limit-support}. The areas of these neighborhoods tend to zero
+as $\delta\downarrow0$. Since $A_L(e_3,-s)/s=\area(E_s)$, this proves
+\eqref{eq:section-coefficient} in the singular case.
+
+Suppose now that $R$ is positive definite. The point $0\in\partial L$
+has only one normal. To see this, an additional normal, combined with
+$e_3$ in the convex normal cone, would give directions $(v,1)$ with
+arbitrarily small nonzero $v$ for which $G(v)=0$. This contradicts the
+positive quadratic lower bound in \eqref{eq:G-expansion}.
+An opposite vertical normal is excluded by the nonempty interior of $L$.
+
+Let $P$ be the projection of $L$ onto $\R^2$. The origin is in
+$\operatorname{int}P$: a supporting line to $P$ at zero would otherwise
+give another, horizontal, normal to $L$ at zero. The upper boundary
+over $P$ is $z=-\phi(y)$, where $\phi$ is convex and finite near zero,
+$\phi(0)=0$, and $\partial\phi(0)=\{0\}$. Extend $\phi$ by $+\infty$
+outside $P$. It is a closed proper convex function and
+\[
+ G(v)=\sup_{y\in P}\{v\cdot y-\phi(y)\}.
+\]
+Subgradients of $\phi$ near zero are locally bounded. By the closedness
+of their graph and $\partial\phi(0)=\{0\}$, every choice
+$v_y\in\partial\phi(y)$ tends to zero as $y\to0$.
+
+For $0<\epsilon<\lambda_{\min}(R)$, \eqref{eq:G-expansion} gives
+\begin{equation}\label{eq:G-sandwich}
+ \tfrac12v^T(R-\epsilon\id)v\le G(v)
+ \le\tfrac12v^T(R+\epsilon\id)v
+\end{equation}
+for all sufficiently small $v$. The conjugate inequality
+$\phi(y)\ge v\cdot y-G(v)$, evaluated at
+$v=(R+\epsilon\id)^{-1}y$, yields the lower bound below.
+For the upper bound take $v_y\in\partial\phi(y)$ and use
+$\phi(y)=v_y\cdot y-G(v_y)$ and the lower bound in
+\eqref{eq:G-sandwich}. Completing the square gives
+\begin{equation}\label{eq:phi-sandwich}
+ \tfrac12y^T(R+\epsilon\id)^{-1}y
+ \le\phi(y)\le
+ \tfrac12y^T(R-\epsilon\id)^{-1}y
+\end{equation}
+near zero. These arguments justify the use of local quadratic estimates
+without assuming a globally quadratic support function.
+
+The lower endpoint $\ell(y)$ of the vertical fiber of $L$ is a finite
+convex function on $\operatorname{int}P$, hence continuous there.
+The fiber over zero has positive length, since
+$\operatorname{int}P$ is the projection of $\operatorname{int}L$.
+Thus $\ell(y)<-d$ near zero for some $d>0$.
+Together with the localization of the sections, this means that for
+small $s$ the section at height $-s$ is exactly the local sublevel set
+$\{\phi\le s\}$; the lower endpoint of the fiber does not restrict it.
+
+The ellipses in \eqref{eq:phi-sandwich} now give
+\[
+ 2\pi\sqrt{\det(R-\epsilon\id)}
+ \le \liminf_{s\downarrow0}\frac{A_L(e_3,-s)}s
+ \le \limsup_{s\downarrow0}\frac{A_L(e_3,-s)}s
+ \le2\pi\sqrt{\det(R+\epsilon\id)} .
+\]
+Here we used the area formula
+$\area\{y:y^TT^{-1}y/2\le s\}=2\pi s\sqrt{\det T}$
+for a positive definite $2\times2$ matrix $T$.
+Letting $\epsilon\downarrow0$ proves \eqref{eq:section-coefficient}.
+Applying the calculation also at $-u$ establishes
+\eqref{eq:lower}--\eqref{eq:upper}, at this stage with coefficients
+which are finite and nonnegative.
+
+\subsection{Laplace limits, including a zero coefficient}\label{app:laplace}
+We record explicitly the endpoint fact needed before positivity is known.
+If $A$ is bounded on $[\alpha,\beta]$ and
+$A(\alpha+s)=as+o(s)$ with $a\ge0$, then
+\begin{equation}\label{eq:abel}
+ \tau^2 e^{\alpha\tau}
+ \int_\alpha^\beta A(t)e^{-\tau t}\,dt\longrightarrow a .
+\end{equation}
+Choose $\delta>0$ so that $|A(\alpha+s)|\le Cs$ for $0<s<\delta$.
+On this interval the substitution $r=\tau s$ gives an integrand
+$\tau A(\alpha+r/\tau)e^{-r}$ bounded by $Cr e^{-r}$ and converging
+pointwise to $ar e^{-r}$. Dominated convergence and
+$\int_0^\infty re^{-r}\,dr=1$ give the limit $a$. The remaining
+integral has modulus at most
+$\tau^2(\beta-\alpha)\|A\|_\infty e^{-\tau\delta}$ and tends to zero.
+This also proves \eqref{eq:abel} when $a=0$.
+The upper endpoint has the analogous formula with $e^{-\beta\tau}$
+and $e^{\tau t}$.
+
+Sections of a fixed compact body are bounded. Fubini's theorem gives
+$\F_L(\zeta u)=\int_{\alpha_L}^{\beta_L}A_L(u,t)e^{i\zeta t}\,dt$.
+Consequently
+\begin{equation}\label{eq:scaled-laplace}
+ \tau^2e^{\alpha_L\tau}\F_L(i\tau u)\to a_L,\qquad
+ \tau^2e^{-\beta_L\tau}\F_L(-i\tau u)\to b_L.
+\end{equation}
+The regular body's endpoint coefficients, obtained by the same positive
+quadratic calculation, are
+$a_K=2\pi\sqrt{f_K(-u)}$ and $b_K=2\pi\sqrt{f_K(u)}$.
+Using \eqref{eq:product} and $w_L=w_K$ therefore yields
+\begin{equation}\label{eq:slopes-product}
+ a_Lb_L
+ =\lim_{\tau\to\infty}\tau^4e^{-w\tau}
+                  \F_L(i\tau u)\F_L(-i\tau u)
+ =a_Kb_K>0 .
+\end{equation}
+Both coefficients for $L$ are positive. Its positive semidefinite
+matrices $R_L(\pm u)$ thus have positive determinant and are positive
+definite. Squaring the equality of products gives
+\begin{equation}\label{eq:density-product}
+ f_L(u)f_L(-u)=f_K(u)f_K(-u)\quad\text{almost everywhere}.
+\end{equation}
+No logarithm of a potentially zero coefficient was used in this deduction.
+
+\subsection{Recovery of the sum of antipodal densities}
+For $t\ge0$, let $\ell_C(y)$ denote the length of the fiber of $C$
+over $y\in u^\perp$. Convexity makes each fiber an interval, so
+\[
+ g_C(tu)=\int_{u^\perp}(\ell_C(y)-t)_+\,dy .
+\]
+Dominated convergence, and the fact that the boundary of the planar
+projection has area zero, imply
+\begin{equation}\label{eq:brightness}
+ -\left.\frac{d}{dt}g_C(tu)\right|_{t=0+}
+ =\area(C|u^\perp)
+ =\frac12\int_{\Sph}|u\cdot v|\,dS_C(v).
+\end{equation}
+The last equality is Cauchy's projection formula. The cosine transform
+is injective on even finite signed measures on the sphere; equivalently,
+its restriction to the even part of a measure determines that part
+\cite{Schneider}. Equality of \eqref{eq:brightness} for $K$ and $L$
+therefore implies
+$S_L+S_{-L}=S_K+S_{-K}$.
+Using \eqref{eq:area-formula} and antipodal invariance of $\sigma$ gives
+\begin{equation}\label{eq:density-sum}
+ f_L(u)+f_L(-u)=f_K(u)+f_K(-u)\quad\text{almost everywhere}.
+\end{equation}
+The two numbers at each antipodal pair are the roots of a monic quadratic
+with this sum and the product in \eqref{eq:density-product}. Hence
+\eqref{eq:unordered} follows, completing the proposed proof of
+Proposition~\ref{prop:geometric}.
+\section{Allocation of zeros and the paired canonical product}\label{app:allocation}
+Throughout this appendix $K$ is noncentrally symmetric, belongs to $C^9_+$,
+and $g_L=g_K$. No differentiability of $\partial L$ is used.
+
+\subsection{One allocation for each analytic branch}
+Compactness of the sphere gives $0<w_{\min}\le w(u)\le w_{\max}<\infty$.
+The real centers $\lambda_m(u)=(2m+1)\pi/w(u)$ have separation
+at least $2\pi/w_{\max}$. Increase the starting index so that
+the uniform error in \eqref{eq:rootsK} is smaller than a fixed fraction
+of this separation. For each $u$, disjoint real-part intervals around
+the $\lambda_m(u)$ then contain exactly one positive-real-part zero
+of $K$ each, namely $z_m(u)$, and exclude all exceptional zeros.
+Finitely many removed branches are absorbed into the bounded exceptional set.
+In particular, if $z_m(u)$ is nonreal, its conjugate cannot be another
+zero of $\F_K(\,\cdot\,u)$.
+
+Choose $u_*$ with $\gamma_K(u_*)\ne0$ and increase the index again so
+that every $z_m(u_*)$ is nonreal. The product
+$\F_K(\zeta u_*)\F_K(-\zeta u_*)$ has a simple zero at $z_m(u_*)$:
+the first factor has a simple zero and the second does not vanish,
+by the preceding separation and \eqref{eq:reality}.
+
+For each such $m$, set
+\[
+ P_m(u)=\F_L(z_m(u)u),\qquad Q_m(u)=\F_L(-z_m(u)u).
+\]
+Both functions are real analytic on the connected real-analytic manifold
+$\Sph$, and \eqref{eq:product} gives $P_mQ_m=0$.
+If $P_m$ is not identically zero, it is nonzero on a nonempty open set,
+where $Q_m$ must vanish. The identity principle gives $Q_m\equiv0$.
+Thus one factor vanishes identically. Both cannot do so, since at $u_*$
+the product on the $L$ side would have a zero of multiplicity at least
+two, contradicting the simple zero on the $K$ side.
+
+Set $\varepsilon_m=1$ if $P_m\equiv0$, and $\varepsilon_m=-1$ if
+$Q_m\equiv0$. In the latter case the reality symmetry implies that
+$\overline{z_m(u)}$ is a zero of $\F_L(\,\cdot\,u)$.
+These choices are independent of $u$.
+
+For completeness, consider multiplicities at any direction $u$.
+If $z_m(u)$ is nonreal, the product on the $K$ side has simple zeros
+at $z_m(u)$ and $\overline{z_m(u)}$. The selected zero of $L$ is
+therefore simple, and $L$ cannot contain the other one as well:
+reality would then make both factors on the $L$ side vanish at the
+selected point. If $z_m(u)$ is real, reality gives equal multiplicities
+at $z_m(u)$ and $-z_m(u)$ for $L$. The $K$ product has multiplicity
+two there, so each factor on the $L$ side has multiplicity one.
+This handles directions where the conjugate choices coincide.
+
+Every zero of $\F_L(\,\cdot\,u)$ is a zero of the $K$ product.
+The large zeros have just been exhausted; the remaining ones lie in a
+bounded set and are finite for fixed $u$, since $\F_L(0)=\vol(L)>0$.
+This proves \eqref{eq:rootsL}, including the assertions about multiplicity
+and exceptional zeros.
+
+\subsection{Hadamard factorization in one direction}\label{app:hadamard}
+Fix $u$. List all zeros with positive real part, including exceptions
+with their multiplicities, as $\zeta_j=x_j+iy_j$. By the preceding
+argument, $x_j>0$, the $y_j$ are bounded, and $x_j$ grows linearly
+with $j$, after a harmless finite reindexing. The other zeros are
+$-\overline{\zeta_j}$. There are no zeros on the imaginary axis by
+\eqref{eq:reality}, and
+\begin{equation}\label{eq:inverse-sums}
+ \sum_j x_j^{-2}<\infty,\qquad
+ \sum_j\left|\zeta_j^{-1}-\overline{\zeta_j}^{-1}\right|<\infty .
+\end{equation}
+
+If $L\subset B(0,T)$, then
+$|F(\zeta)|\le\vol(L)e^{T|\Ima\zeta|}$, so $F$ is an entire
+function of order at most one. Hadamard factorization in this case
+gives a canonical product of genus at most one with an exponential
+whose exponent has degree at most one \cite[p.~4]{Siu}.
+Pairing its zeros and using the second sum in \eqref{eq:inverse-sums}
+to absorb the linear canonical factors yields
+\begin{equation}\label{eq:canonical}
+ F(\zeta)=F(0)e^{iq\zeta}
+ \prod_j\left(1-\frac{\zeta}{\zeta_j}\right)
+        \left(1+\frac{\zeta}{\overline{\zeta_j}}\right),
+ \qquad q\in\R .
+\end{equation}
+For clarity, the paired factor differs from one by
+\[
+ \frac{2iy_j\zeta-\zeta^2}{|\zeta_j|^2}.
+\]
+The first sum in \eqref{eq:inverse-sums} therefore proves local uniform
+convergence of this product. The constant is $F(0)$ by evaluation at
+zero. Both $F$ and the paired product satisfy the reality symmetry
+in \eqref{eq:reality}; their quotient, an exponential of a linear
+function, then has a purely imaginary coefficient. This explains
+the real number $q$ in \eqref{eq:canonical}.
+
+At $\zeta=i\tau$, each paired factor is
+$[x_j^2+(\tau-y_j)^2]/|\zeta_j|^2>0$.
+Thus real logarithms give
+\begin{equation}\label{eq:Dseries}
+ D_L(\tau)=-2q\tau+\sum_j R_{x_j,y_j}(\tau),\qquad
+ R_{x,y}(\tau)=\log\frac{x^2+(\tau-y)^2}{x^2+(\tau+y)^2}.
+\end{equation}
+For fixed $\tau$ the logarithmic series is absolutely convergent:
+its tail is $O_\tau(\sum_jx_j^{-2})$, with bounded heights $y_j$.
+Taking the finite difference consequently gives the exact identity
+\begin{equation}\label{eq:Hseries}
+ H_L(\tau)=\sum_j\bigl(R_{x_j,y_j}(2\tau)-2R_{x_j,y_j}(\tau)\bigr).
+\end{equation}
+The value of $q$ is not required.
+
+If the direction has positive finite endpoint coefficients, the
+limits \eqref{eq:scaled-laplace} may be written
+\[
+ F(i\tau)=e^{-\alpha_L\tau}\tau^{-2}(a_L+o(1)),\qquad
+ F(-i\tau)=e^{\beta_L\tau}\tau^{-2}(b_L+o(1)).
+\]
+Taking logarithms and then the same finite difference yields
+\begin{equation}\label{eq:Hlimit}
+ D_L(\tau)=-(\alpha_L+\beta_L)\tau+\log(a_L/b_L)+o(1),
+ \qquad H_L(\tau)\longrightarrow\log(b_L/a_L).
+\end{equation}
+
+\section{Kernel estimates and replacement of the zeros}\label{app:kernels}
+The estimates in this appendix also specify the analytic content checked,
+in part, by the separate Lean files. Their use for the convex-body
+transforms is supplied by the preceding and following appendices.
+
+\subsection{A summable logarithmic remainder}
+For $x\ne0$, $|y|\le M$, $\tau>0$ and $\tau\ge4M$, we have
+\begin{equation}\label{eq:kernel-bound}
+ \left|R_{x,y}(\tau)+\frac{4y\tau}{x^2+\tau^2}\right|
+ \le\frac{36M^3\tau}{(x^2+\tau^2)^2}
+ \le\frac{36M^3}{\tau x^2}.
+\end{equation}
+Here is a direct proof. Put $A=x^2+\tau^2$, $B=A+y^2$ and
+$v=2\tau y/B$. Then $|v|\le2|y|/\tau\le1/2$, and
+\[
+ R_{x,y}(\tau)=\log(1-v)-\log(1+v).
+\]
+The derivative of $\log(1-v)-\log(1+v)+2v$ is
+$-2v^2/(1-v^2)$. Integration from zero therefore gives, for
+$|v|\le1/2$,
+\[
+ |\log(1-v)-\log(1+v)+2v|\le4|v|^3.
+\]
+Since $\tau^2\le A$ and $B\ge A$, this bound is at most
+$32M^3\tau/A^2$. The denominator correction is
+\[
+ \left|\frac{4\tau y}{A}-\frac{4\tau y}{B}\right|
+ =\frac{4\tau|y|^3}{AB}\le\frac{4M^3\tau}{A^2}.
+\]
+Their sum proves the first inequality in \eqref{eq:kernel-bound};
+the second follows from $A^2\ge\tau^2x^2$.
+
+For the zeros in Appendix~\ref{app:hadamard}, summing the bound proves
+absolute summability of the remainders and
+\begin{equation}\label{eq:linearize}
+ \sum_jR_{x_j,y_j}(\tau)
+ =-4\sum_j\frac{y_j\tau}{x_j^2+\tau^2}+o(1).
+\end{equation}
+The error is bounded in modulus by
+$36M^3\tau^{-1}\sum_jx_j^{-2}$.
+The rational series itself is absolutely convergent, since its summands
+are bounded in modulus by $M\tau/x_j^2$.
+Apply \eqref{eq:linearize} at $\tau$ and $2\tau$ in
+\eqref{eq:Hseries}. The algebraic identity
+\begin{equation}\label{eq:difference-kernel}
+ -\frac{8y\tau}{x^2+4\tau^2}
+ +\frac{8y\tau}{x^2+\tau^2}
+ =\frac{24y\tau^3}{(x^2+\tau^2)(x^2+4\tau^2)}
+\end{equation}
+gives \eqref{eq:Hkernel}. All estimates used here are for sums of
+absolute values; no exchange of conditionally convergent series is involved.
+
+\subsection{Positive weights and bounded mass}\label{app:weights}
+Introduce
+\[
+ k_\tau(x)=\frac{\tau}{x^2+\tau^2},\qquad
+ \eta_\tau(x)=\frac{24\tau^3}{(x^2+\tau^2)(x^2+4\tau^2)}
+            =8k_\tau(x)-4k_{2\tau}(x).
+\]
+For $\tau>0$ and $x>0$,
+\begin{equation}\label{eq:positive-weight}
+ 0<\eta_\tau(x)\le8k_\tau(x)\le\frac8\tau .
+\end{equation}
+If $x_m\ge\rho m$ for $m\ge m_1\ge1$ and $\rho>0$, monotonicity
+of $t\mapsto\tau/(\rho^2t^2+\tau^2)$ gives
+\[
+ \sum_{m\ge m_1}k_\tau(x_m)
+ \le\sum_{m\ge1}\frac{\tau}{\rho^2m^2+\tau^2}
+ \le\int_0^\infty\frac{\tau\,dt}{\rho^2t^2+\tau^2}
+ =\frac{\pi}{2\rho}.
+\]
+Finitely many initial terms are bounded by their number divided by
+$\tau$. Thus the total mass of both $k_\tau(x_m)$ and
+$\eta_\tau(x_m)$ is bounded for $\tau\ge1$.
+Every individual weight tends to zero.
+
+It follows that if $e_m\to0$, then
+\begin{equation}\label{eq:height-error}
+ \sum_m e_m\eta_\tau(x_m)\longrightarrow0 .
+\end{equation}
+Indeed $e_m$ is bounded, so the series converges absolutely for each
+$\tau$. Given $\epsilon>0$, choose an index after which $|e_m|<\epsilon$.
+The tail has modulus at most $\epsilon$ times the uniform mass bound;
+the finite head tends to zero. Let $\epsilon\downarrow0$.
+This argument is only directional: its constants may depend on the
+fixed $u$, which is sufficient for the subsequent common-parameter argument.
+
+\subsection{Replacing the real parts without differentiating a series}
+For $x,a,\tau>0$ with $|x-a|\le D$,
+\begin{equation}\label{eq:real-replacement}
+ |k_\tau(x)-k_\tau(a)|
+ \le D\left(\frac1{x^2}+\frac1{a^2}\right).
+\end{equation}
+To see this, write $A=x^2+\tau^2$, $B=a^2+\tau^2$. The difference
+has modulus
+$|x-a|\tau(x+a)/(AB)$, and $\tau(x+a)\le A+B$.
+This gives $D(1/A+1/B)$ and then \eqref{eq:real-replacement}.
+For fixed $x,a$ the difference tends to zero as $\tau\to\infty$.
+
+If $(x_m)$ and $(a_m)$ are positive, their difference is uniformly
+bounded, and $\sum_m(x_m^{-2}+a_m^{-2})<\infty$, dominated convergence
+for series gives
+\[
+ \sum_m|k_\tau(x_m)-k_\tau(a_m)|\longrightarrow0.
+\]
+The same holds for $\eta_\tau$, by its expression in terms of
+$k_\tau$ and $k_{2\tau}$; bounded signed coefficients may also be
+inserted.
+
+Apply these facts to a fixed direction and
+$a_m=\lambda_m=(2m+1)\pi/w$. The assumptions follow from
+\eqref{eq:rootsL}; in particular $x_m$ and $\lambda_m$ grow linearly.
+First replace $y_m$ by $\varepsilon_m\gamma_K(u)$ using
+\eqref{eq:height-error}. Then replace $x_m$ by $\lambda_m$ using
+\eqref{eq:real-replacement}. The exceptional zeros are finite and
+each contributes $o(1)$ by \eqref{eq:positive-weight}.
+Consequently \eqref{eq:Hkernel} becomes
+\begin{equation}\label{eq:model-sum}
+ H_L(\tau)=\gamma_K(u)\sum_{m\ge m_0}
+                         \varepsilon_m\eta_\tau(\lambda_m)+o(1).
+\end{equation}
+
+\section{The common mean and proof of the transport proposition}\label{app:mean}
+We finish the proposed proof of Proposition~\ref{prop:transport}.
+For fixed $u$, put $s=2\pi/w(u)$, so that
+$\lambda_m=s(m+\tfrac12)$ and $\tau=sR$. A direct calculation gives
+\[
+ \eta_{sR}\bigl(s(m+\tfrac12)\bigr)
+ =\frac{12w(u)}{\pi}
+   \frac{R^3}{((m+\tfrac12)^2+R^2)((m+\tfrac12)^2+4R^2)} .
+\]
+Thus \eqref{eq:model-sum} gives precisely \eqref{eq:Hmean}, with
+$N(R)$ defined in \eqref{eq:mean}. Its only input from the direction
+is the common sequence of signs, which Appendix~\ref{app:allocation}
+has already shown to be independent of that direction.
+
+\subsection{Normalization of the positive weights}
+Let
+\[
+ \varphi(t)=\frac1{(1+t^2)(4+t^2)},\qquad t\ge0.
+\]
+The mass of the weights of $N$ is
+\begin{equation}\label{eq:mass}
+ W(R)=\frac{12}{\pi R}
+           \sum_{m\ge m_0}\varphi((m+\tfrac12)/R).
+\end{equation}
+The function $\varphi$ is nonnegative, decreasing and integrable.
+Left and right rectangular sums on intervals of length $1/R$
+bound its integral. The midpoint sum is between the same two sums,
+whose difference is $\varphi(0)/R$. Therefore
+\[
+ \left|\frac1R\sum_{m\ge0}\varphi((m+\tfrac12)/R)
+             -\int_0^\infty\varphi(t)\,dt\right|
+ \le\frac{\varphi(0)}R .
+\]
+Removing the first $m_0$ terms changes the expression by at most
+$m_0\varphi(0)/R$. Partial fractions give
+\[
+ \int_0^\infty\varphi(t)\,dt
+ =\frac13\int_0^\infty
+       \left(\frac1{1+t^2}-\frac1{4+t^2}\right)\,dt
+ =\frac{\pi}{12}.
+\]
+It follows that $W(R)\to1$. In particular,
+\begin{equation}\label{eq:signed-bound}
+ |N(R)|\le W(R),\qquad \limsup_{R\to\infty}|N(R)|\le1 .
+\end{equation}
+
+\subsection{Existence and independence of the limit}
+Let $G$ be a full-measure set where the positive endpoint expansions hold.
+There is $u_0\in G$ with $\gamma_K(u_0)\ne0$: a nonempty open subset of
+the nonzero set of the continuous function $\gamma_K$ has positive
+surface measure. Equations \eqref{eq:Hlimit} and \eqref{eq:Hmean} then give
+\[
+ N(R)=\frac{H_L(2\pi R/w(u_0))}{w(u_0)\gamma_K(u_0)}+o(1)
+ \longrightarrow
+ c:=\frac{\log(b_L(u_0)/a_L(u_0))}
+          {w(u_0)\gamma_K(u_0)} .
+\]
+By \eqref{eq:signed-bound}, $c\in[-1,1]$.
+For any other $u\in G$, the very same $N(R)$ appears in
+\eqref{eq:Hmean}, so
+\[
+ \log(b_L(u)/a_L(u))=w(u)\gamma_K(u)c.
+\]
+This includes $\gamma_K(u)=0$, since then the right side of
+\eqref{eq:Hmean} tends to zero. The parameter is unique because the
+identity holds at $u_0$. This is \eqref{eq:transport}.
+
+The common mean, rather than pointwise convergence of individual signs
+$\varepsilon_m$, is the quantity used in the proof. Its existence is forced
+by the endpoint limit in a single admissible direction. Neither convergence
+of the sign sequence nor uniform endpoint asymptotics for $L$ is assumed.
+\begin{thebibliography}{9}
+\bibitem{Bianchi2016}
+G.~Bianchi, \emph{The covariogram and Fourier--Laplace transform in
+$\mathbb C^n$}, Proceedings of the London Mathematical Society
+113 (2016), 1--23.
+\href{https://doi.org/10.1112/plms/pdw020}{doi:10.1112/plms/pdw020};
+\href{https://arxiv.org/abs/1312.7816}{arXiv:1312.7816}.
+
+\bibitem{Bianchi2023}
+G.~Bianchi, \emph{The covariogram problem}, in
+\emph{Harmonic Analysis and Convexity} (2023), 37--82.
+\href{https://doi.org/10.1515/9783110775389-002}{doi:10.1515/9783110775389-002};
+\href{https://people.dimai.unifi.it/bianchi/lavori/covariogram_survey14.pdf}{author's manuscript}.
+
+\bibitem{Schneider}
+R.~Schneider, \emph{Convex Bodies: The Brunn--Minkowski Theory},
+second expanded edition, Encyclopedia of Mathematics and its Applications
+151, Cambridge University Press, 2014.
+\href{https://doi.org/10.1017/CBO9781139003858}{doi:10.1017/CBO9781139003858}.
+
+\bibitem{EvansGariepy}
+L.~C.~Evans and R.~F.~Gariepy, \emph{Measure Theory and Fine Properties
+of Functions}, second edition, CRC Press, 2025.
+\href{https://www.routledge.com/Measure-Theory-and-Fine-Properties-of-Functions/Evans/p/book/9781032946443}{publisher's description and contents}.
+
+\bibitem{Siu}
+Y.-T.~Siu, \emph{Weierstrass and Hadamard Factorization of Entire Functions},
+Math 213a course notes, Harvard University, Fall 2024.
+\href{https://people.math.harvard.edu/~siu/math213a/weierstrass_and_hadamard_factorization_of_entire_function.pdf}{author's notes}.
+\end{thebibliography}
+\end{document}

@@ -1,0 +1,131 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath,amssymb,booktabs}
+\usepackage[margin=26mm]{geometry}
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=blue]{hyperref}
+\title{Supplement S2\\Computational Diagnostics}
+\author{Andrea\\\small A curious amateur with proof obligations}
+\date{9 October 2026}
+\begin{document}
+\maketitle
+
+\noindent Accompanying \emph{Covariogram Uniqueness with One Regular Body in
+$\mathbb R^3$: A Candidate Proof via Area Measures and Fourier--Laplace Zeros}.
+The computations described here are diagnostics. The mathematical argument
+in the paper does not use numerical agreement as a premise.
+
+\section{A scalar test of the spectral identities}
+The file \path{ricerca/verifica_media_zeri.py} uses only the Python standard
+library and the test profile
+\[
+ A(t)=(1-t^2)(1+t/5),\qquad -1\le t\le1,
+ \qquad F(\zeta)=\int_{-1}^1A(t)e^{i\zeta t}\,dt .
+\]
+Its endpoint slopes are $a=8/5$ and $b=12/5$, its width is $2$, and the
+model zero height is
+$\gamma=\tfrac12\log(b/a)=0.202732554054\ldots$.
+This scalar test probes signs, constants and finite differences; it is
+not a uniqueness test on a class of three-dimensional bodies.
+
+The script computes $10\,000$ approximations to nonzero zeros by Newton
+iteration, starting from $(2m+1)\pi/2+i\gamma$, $m=1,\ldots,10\,000$.
+It applies Newton's method to an explicit numerator $-\zeta^2F(\zeta)$
+and uses the corresponding analytic derivative. These computations do
+not certify that the resulting points are zeros, or that every zero has
+been found.
+
+The values on the imaginary axis are evaluated using the polynomial
+endpoint expansions and the formula
+\[
+ \int_0^2s^k e^{-\tau s}\,ds
+ =\frac{k!}{\tau^{k+1}}
+   \left(1-e^{-2\tau}\sum_{j=0}^k\frac{(2\tau)^j}{j!}\right).
+\]
+The formula is exact mathematically; its implementation uses floating-point
+arithmetic. As the endpoints are $-1$ and $1$, the centered quantity
+$B(\tau)=D(\tau)+(\alpha+\beta)\tau$ coincides with
+$D(\tau)=\log F(i\tau)-\log F(-i\tau)$.
+
+\section{The finite-difference quantity used in the paper}
+The main paper uses $H(\tau)=D(2\tau)-2D(\tau)$.
+For an approximate zero $\zeta_j=x_j+iy_j$, the truncated spectral
+calculation uses
+\[
+ \sum_{j=1}^{10\,000}
+ \bigl(R_{x_j,y_j}(2\tau)-2R_{x_j,y_j}(\tau)\bigr),\qquad
+ R_{x,y}(\tau)=\log\frac{x^2+(\tau-y)^2}{x^2+(\tau+y)^2}.
+\]
+The following output was reproduced while preparing this supplement.
+The last column is the signed difference between the truncated spectral
+sum and the direct Laplace calculation.
+
+\begin{center}
+\begin{tabular}{rrrr}
+\toprule
+$\tau$ & Direct $H(\tau)$ & Truncated sum & Difference\\
+\midrule
+20  & 0.345166366871 & 0.345166366738 & $-1.332\cdot10^{-10}$\\
+100 & 0.393050736275 & 0.393050719631 & $-1.664\cdot10^{-8}$\\
+500 & 0.402968515298 & 0.402966436253 & $-2.079\cdot10^{-6}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The theoretical endpoint limit is
+$\log(b/a)=0.405465108108\ldots$.
+The increasing discrepancy in the last column is reported without
+correction or suppression. The calculation omits the infinite tail,
+and neither that tail nor rounding errors are enclosed by certified
+interval bounds.
+
+\section{Other diagnostics retained from the notebook}
+The same script compares the centered logarithm $B(\tau)$ with the
+truncated sum of $R_{x_j,y_j}(\tau)$. It also adds the model-tail estimate
+\[
+ -\frac{4\gamma}{\pi}
+   \arctan\frac{\tau}{\pi(10\,000+1)} .
+\]
+This correction approximates a tail integral; it is not an error
+certificate for the true zero sum. The observed values are:
+\begin{center}
+\begin{tabular}{rrrr}
+\toprule
+$\tau$ & Direct $B(\tau)$ & Truncated sum & Error after model tail\\
+\midrule
+20  & $-0.365053362686$ & $-0.364889050321$ & $-5.262\cdot10^{-14}$\\
+100 & $-0.397180683717$ & $-0.396359124554$ & $-2.641\cdot10^{-13}$\\
+500 & $-0.403800388239$ & $-0.399692925271$ & $-1.327\cdot10^{-12}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The script additionally evaluates $J(\tau)=B(\tau)-\tau B'(\tau)$,
+which belonged to an earlier route in the notebook.
+The finite-difference proof in the present paper does not use that derivative.
+
+The separate file \path{ricerca/verifica_scambi.py} checks polynomial
+identities, cutoff derivatives and rational inequalities for explicit
+examples investigated earlier. Its assertions use exact rational
+arithmetic; some displayed illustrative values use floating-point
+trigonometric functions. All assertions passed in the current run.
+For example, the rational convexity margin reported by the script is
+$35781657829/40000000000>0$.
+These examples are retained in the research notebook and are not premises
+of the candidate theorem in the paper.
+
+\section{Repetition and source records}
+From the repository root, with Python 3 available:
+\begin{verbatim}
+python3 ricerca/verifica_media_zeri.py
+python3 ricerca/verifica_scambi.py
+\end{verbatim}
+Neither script requires third-party Python packages. The source files and
+the run outputs are provided separately; the latter are saved under
+\path{paper/diagnostics/}. Last-digit floating-point results can depend on
+the runtime and platform.
+
+These diagnostics should be distinguished from the kernel-checked
+conditional theorems in Supplement S1. They supply inspectable checks of
+specific calculations, not an independent validation of the geometric or
+spectral transfer propositions.
+\end{document}

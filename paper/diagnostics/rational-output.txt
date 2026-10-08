@@ -1,0 +1,8 @@
+Tutti i controlli esatti sono superati.
+Margine di convessita >= 35781657829/40000000000
+Margine decimale: 0.894541445725
+Raggio interno della corona: 0.6563308058388879
+Raggio esterno della corona: 1.889253606432683
+Raggio della palla comune nei corpi differenza: 1.99998
+Separazione esplicita a x=(1,1,0): g_K-g_L <= -pi*epsilon^3/6.
+Vettore della calotta per h=1-epsilon*P3: 8*pi*epsilon*(3/5)^(3/2) e_3; coefficiente = 11.680642586804002

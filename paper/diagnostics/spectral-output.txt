@@ -1,0 +1,19 @@
+Diagnostica numerica, non certificazione della dimostrazione.
+Pendenze: a=1.6, b=2.4; limite atteso log(a/b)=-0.405465108108
+Zeri calcolati: 10000; gamma asintotica=0.202732554054
+tau    J da Laplace       somma sui primi zeri    differenza
+ 20  -0.325939310290    -0.325939310246     +4.438e-11
+100  -0.388945470759    -0.388945465210     +5.548e-09
+500  -0.402137617528    -0.402136924197     +6.933e-07
+Formula semplificata senza derivate: B da Laplace e somma dei logaritmi.
+L'ultima colonna aggiunge una stima integrale della coda del modello asintotico.
+tau    B da Laplace       somma troncata          scarto con coda stimata
+ 20  -0.365053362686    -0.364889050321     -5.262e-14
+100  -0.397180683717    -0.396359124554     -2.641e-13
+500  -0.403800388239    -0.399692925271     -1.327e-12
+Controllo con differenze finite: H(tau)=D(2*tau)-2*D(tau).
+tau    H da Laplace       somma troncata          differenza
+ 20   0.345166366871     0.345166366738     -1.332e-10
+100   0.393050736275     0.393050719631     -1.664e-08
+500   0.402968515298     0.402966436253     -2.079e-06
+La somma troncata omette la coda; Newton non certifica che siano tutti gli zeri.
