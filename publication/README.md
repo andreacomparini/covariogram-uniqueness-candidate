@@ -15,6 +15,16 @@ The DOI was reserved in Zenodo before preparing the files so that it could
 be included in the manuscript. Registration occurs when the record is
 published; the public landing page is the authoritative publication record.
 
+**Publication confirmed:** Zenodo's public API reported `published` and a
+record creation time of **2026-10-09 00:22:22 UTC** (02:22:22 in Italy).
+The DOI resolved successfully to https://zenodo.org/records/23250931.
+All seven public downloads were compared byte for byte with the prepared
+files and matched. The [verification report](zenodo-23250931/verification.json)
+and [deposited manifest](zenodo-23250931/deposit-manifest.json) record these
+checks and the exact source commit `7fb853f751ab8238c033c5f3f3d2783f83681431`.
+This report was added to Git after publication and is not part of the
+already-deposited `v1.0-candidate` archive.
+
 ## Contents and reading order
 
 1. `covariogram-uniqueness-candidate.tex`: the English mathematical paper,

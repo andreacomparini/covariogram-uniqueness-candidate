@@ -1,0 +1,76 @@
+{
+  "record_url": "https://zenodo.org/records/23250931",
+  "doi": "10.5281/zenodo.23250931",
+  "record_status": "published",
+  "public_api_url": "https://zenodo.org/api/records/23250931",
+  "zenodo_created": "2026-10-09T00:22:22.176242+00:00",
+  "zenodo_updated": "2026-10-09T00:22:22.646254+00:00",
+  "checked_at_utc": "2026-10-09T00:23:20.468806+00:00",
+  "creator": "Andrea Comparini",
+  "version": "1.0-candidate",
+  "git_commit": "7fb853f751ab8238c033c5f3f3d2783f83681431",
+  "git_tag": "v1.0-candidate",
+  "doi_resolution": {
+    "http_status": 200,
+    "resolved_url": "https://zenodo.org/records/23250931"
+  },
+  "files": [
+    {
+      "filename": "README-DEPOSIT.md",
+      "size": 3918,
+      "sha256": "0394e66d610f6fef0d11163f4f609a4b93716f7baa031e177a7448d5acf0198e",
+      "zenodo_checksum": "md5:e1aa21235c977da5fde318269981e75d",
+      "public_download_matches_staged_file": true,
+      "url": "https://zenodo.org/api/records/23250931/files/README-DEPOSIT.md/content"
+    },
+    {
+      "filename": "SHA256SUMS",
+      "size": 587,
+      "sha256": "ebe3bf0e70b286b2394968808bd83df2c6a2c00045fe2e8307655d1888c18dd2",
+      "zenodo_checksum": "md5:371e08b30b9d3d76f0a2c3ba4e769c04",
+      "public_download_matches_staged_file": true,
+      "url": "https://zenodo.org/api/records/23250931/files/SHA256SUMS/content"
+    },
+    {
+      "filename": "computational-diagnostics.tex",
+      "size": 5449,
+      "sha256": "448d304a7b86d7075438f7d9f3c357e96aa2d4a12c5c5806fd6260a1f4241f2d",
+      "zenodo_checksum": "md5:934c45fbdfa2824c596b8cf0725acc1f",
+      "public_download_matches_staged_file": true,
+      "url": "https://zenodo.org/api/records/23250931/files/computational-diagnostics.tex/content"
+    },
+    {
+      "filename": "covariogram-uniqueness-candidate-1.0-candidate.zip",
+      "size": 229053,
+      "sha256": "7c84191ba50402cc9d40b23c42ddcf1593fbc2fd2f68989745ff6730de42e3e3",
+      "zenodo_checksum": "md5:02efa0ff05aca80a078c94d0e6f43daa",
+      "public_download_matches_staged_file": true,
+      "url": "https://zenodo.org/api/records/23250931/files/covariogram-uniqueness-candidate-1.0-candidate.zip/content"
+    },
+    {
+      "filename": "covariogram-uniqueness-candidate.tex",
+      "size": 40207,
+      "sha256": "325df9cbb3f4134f7684c438f88ba87a6eec93eaa36434ecccfba207a790eddd",
+      "zenodo_checksum": "md5:b932171e07c9df77a0f145e311267ca9",
+      "public_download_matches_staged_file": true,
+      "url": "https://zenodo.org/api/records/23250931/files/covariogram-uniqueness-candidate.tex/content"
+    },
+    {
+      "filename": "lean-verification-supplement.tex",
+      "size": 10384,
+      "sha256": "93c811084ea84a0ae34bfad079638360d2faf0dac9eda37d14b07ea14f967038",
+      "zenodo_checksum": "md5:f7c02e4f09cbcd705c3fbbe310b9ed7d",
+      "public_download_matches_staged_file": true,
+      "url": "https://zenodo.org/api/records/23250931/files/lean-verification-supplement.tex/content"
+    },
+    {
+      "filename": "deposit-manifest.json",
+      "size": 11015,
+      "sha256": "cd3b6d151ee07c5cd70e77e5982594cd2389e23a3f589f82913a02802ec10b1a",
+      "zenodo_checksum": "md5:bb5e7014e401dc84a84b2b95a0e8561e",
+      "public_download_matches_staged_file": true,
+      "url": "https://zenodo.org/api/records/23250931/files/deposit-manifest.json/content"
+    }
+  ],
+  "scope": "This is a locally generated verification report of public Zenodo metadata and downloaded bytes, not a signed certificate or independent identity verification."
+}
