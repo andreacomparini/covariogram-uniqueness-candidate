@@ -1,6 +1,6 @@
 # Covariogram uniqueness: technical draft and separate supplements
 
-Version: 9 October 2026. Author: Andrea, *A curious amateur with proof obligations*.
+Version: 9 October 2026. Author: Andrea Comparini, *A curious amateur with proof obligations*.
 
 ## Read the mathematical paper first
 
@@ -61,4 +61,4 @@ Each LaTeX document is self-contained. The editor provides its PDF preview; a co
 
 The public repository is [andreacomparini/covariogram-uniqueness-candidate](https://github.com/andreacomparini/covariogram-uniqueness-candidate). It contains the LaTeX sources, supplements, Lean sources and records, diagnostics, and research documents. No exported PDF is included in this initial edition.
 
-Downloaded toolchains and dependency caches are excluded. See the [root README](../README.md#reproduce-the-checks) for setup instructions and the distinction between a successful local check and an untested fresh-machine installation. No reuse license has yet been selected. No contact with, review by, or endorsement from Bianchi is asserted.
+Downloaded toolchains and dependency caches are excluded. See the [root README](../README.md#reproduce-the-checks) for setup instructions and the distinction between a successful local check and an untested fresh-machine installation. The paper and original documentation are licensed under CC BY 4.0, with MIT for the original code; see [LICENSE.md](../LICENSE.md). No contact with, review by, or endorsement from Bianchi is asserted.

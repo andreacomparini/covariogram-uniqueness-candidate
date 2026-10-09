@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "Please cite the deposited candidate manuscript and specify its version."
+type: article
+title: "Covariogram Uniqueness with One Regular Body in R³: A Candidate Proof via Area Measures and Fourier–Laplace Zeros"
+authors:
+  - family-names: Comparini
+    given-names: Andrea
+version: 1.0-candidate
+date-released: 2026-10-09
+doi: 10.5281/zenodo.23250931
+url: "https://doi.org/10.5281/zenodo.23250931"
+repository-code: "https://github.com/andreacomparini/covariogram-uniqueness-candidate"
+abstract: >-
+  A candidate proof for covariogram uniqueness of a C9 convex body with
+  positive Gaussian curvature in R3 among arbitrary convex competitors,
+  up to translation and central reflection. The two central propositions
+  require independent review. Partial Lean verification of 33 supporting
+  and conditional theorems does not certify the complete theorem.
+keywords:
+  - covariogram
+  - convex geometry
+  - inverse problems
+  - phase retrieval
+  - Lean
+  - AI-assisted mathematics

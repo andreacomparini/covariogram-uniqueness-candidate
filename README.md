@@ -2,9 +2,14 @@
 
 ## A candidate proof for independent mathematical review
 
-**Andrea — A curious amateur with proof obligations**
+**Andrea Comparini — A curious amateur with proof obligations**
 
 Draft dated 9 October 2026.
+
+**Citable deposit:** version `1.0-candidate`, Andrea Comparini,
+[doi:10.5281/zenodo.23250931](https://doi.org/10.5281/zenodo.23250931).
+See the [deposit guide](publication/README.md) for contents, attribution and
+the distinction between this version and the earlier timestamped snapshot.
 
 This repository presents a candidate argument for an extension explicitly identified as open in Gabriele Bianchi’s work: if a convex body **K has C⁹ boundary with positive Gaussian curvature in R³**, does its covariogram determine it **among all convex bodies**, up to translation and central reflection?
 
@@ -71,6 +76,6 @@ The project arose from AI-assisted exploration by a nonprofessional, nonspeciali
 
 The repository is a review draft. Publication is not a claim that the open problem has been solved, and does not imply review or endorsement by Bianchi or any other mathematician. Corrections and precise mathematical objections are welcome as repository issues.
 
-Downloaded Lean distributions, mathlib sources and build caches are excluded. No reuse license has yet been selected for the original materials; this initial publication does not add one. Dependencies retain their own licenses.
+Downloaded Lean distributions, mathlib sources and build caches are excluded. The paper and original documentation are licensed under CC BY 4.0; original Lean, Python and shell code is licensed under MIT. See [LICENSE.md](LICENSE.md) for scope and attribution. Dependencies and third-party materials retain their own terms.
 
 [Italian project overview](README.it.md)

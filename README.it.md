@@ -2,6 +2,13 @@
 
 Registro bibliografico e percorso di studio verso il problema di unicità per i corpi convessi tridimensionali.
 
+**Deposito citabile a nome Andrea Comparini:** versione `1.0-candidate`,
+[doi:10.5281/zenodo.23250931](https://doi.org/10.5281/zenodo.23250931).
+La [guida al deposito](publication/README.md) descrive contenuti e attribuzione.
+Il DOI identifica il deposito; non certifica identità civile, correttezza o priorità
+scientifica. Testi originali: CC BY 4.0; codice originale: MIT
+([licenze e ambito](LICENSE.md)).
+
 **Paper tecnico in inglese — 9 ottobre 2026:** [Covariogram Uniqueness with One Regular Body in R³](paper/covariogram-uniqueness-candidate.tex), con quattro appendici di dimostrazioni e [supplementi separati per Lean e diagnostica](paper/README.md). È una prova candidata per il caso con primo corpo C⁹₊ e concorrente arbitrario, destinata alla revisione matematica; non è un risultato convalidato.
 
 Aggiornamento: 8 ottobre 2026. Questa prima versione seleziona le tappe fondamentali e alcuni sviluppi recenti; non pretende di censire ogni articolo sul covariogramma. La ricerca effettuata non ha individuato una soluzione generale successiva alla rassegna del 2023.
