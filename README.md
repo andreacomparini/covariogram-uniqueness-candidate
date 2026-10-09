@@ -25,6 +25,7 @@ The main text gives the geometric reduction, the spectral orientation argument a
 | [Original notebook](ricerca/rigidita-scambi-covariogramma.tex) | Detailed research record in Italian |
 | [Bibliographic register](bibliografia/registro.md) | Sources, chronology and literature-search record |
 | [Study essay](saggi/evoluzione-e-percorso.md) | Background and learning path in Italian |
+| [Timestamp evidence](attestazioni/README.md) | First-publication snapshot and verified RFC 3161 receipt; no qualified eIDAS status asserted |
 
 The target is described in [Bianchi’s 2016 paper, Remark 5.2](https://arxiv.org/abs/1312.7816), and in the [2023 survey, discussion after Theorem 3.25](https://people.dimai.unifi.it/bianchi/lavori/covariogram_survey14.pdf). The literature search documented here did not identify a subsequent solution in the sources checked; it is not an exhaustive priority certification.
 

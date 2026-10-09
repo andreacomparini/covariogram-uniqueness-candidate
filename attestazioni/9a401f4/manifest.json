@@ -1,0 +1,205 @@
+{
+  "archive": {
+    "bytes": 106150,
+    "file": "covariogram-uniqueness-candidate-9a401f4.zip",
+    "sha256": "7950b0928d6bfd0f6a0fc3b04c78fd39acec3963b06bfbe8ffc5e2d8434eecc0"
+  },
+  "commit": "9a401f4a10f2ea685be6681eabaf594c6024602b",
+  "file_count": 38,
+  "files": [
+    {
+      "bytes": 420,
+      "path": ".gitignore",
+      "sha256": "4136096922c0bf2490323af7b35d9f42b2a4c64d780abefd16668acb698790e0"
+    },
+    {
+      "bytes": 3087,
+      "path": "README.it.md",
+      "sha256": "d21fd0fc47f9b4c370f1296eada8d9513bf9afa3c1dfa5c64f12d081429c9644"
+    },
+    {
+      "bytes": 5699,
+      "path": "README.md",
+      "sha256": "720e07fac2eef3beeebc0cdbbb1a0d652d276a7e5fe6acdc7e002b4f37a652e1"
+    },
+    {
+      "bytes": 13269,
+      "path": "bibliografia/registro.md",
+      "sha256": "76ec44d4d7c36724cbcb790a22cac897a51b41aae70a19fdbfa937c42b74d39c"
+    },
+    {
+      "bytes": 1490,
+      "path": "formalizzazione/Audit.lean",
+      "sha256": "05b732d0cc94c3cc3d94dc488d8a9b3765147fac1cc81f6e04ac7d13d5f30e2e"
+    },
+    {
+      "bytes": 335,
+      "path": "formalizzazione/CovariogramCheck.lean",
+      "sha256": "049af8810e988e6e2625ad038a96c638c462cea2e0bad2160ff892d00283e808"
+    },
+    {
+      "bytes": 2822,
+      "path": "formalizzazione/CovariogramCheck/Algebra.lean",
+      "sha256": "7a5c751837e4b460e7cac3680b0676f0a8541ce99a8802b0f033ac4aaba6917d"
+    },
+    {
+      "bytes": 1177,
+      "path": "formalizzazione/CovariogramCheck/AnalyticChoice.lean",
+      "sha256": "673e4ce11fb4648bcb5b4457b8d582bd123b8262879016ab55216200a2d5b9d5"
+    },
+    {
+      "bytes": 5181,
+      "path": "formalizzazione/CovariogramCheck/KernelSeries.lean",
+      "sha256": "805db58644c7b199656c018129ee89a073e80a1bd708d9af18c92a225f922094"
+    },
+    {
+      "bytes": 4087,
+      "path": "formalizzazione/CovariogramCheck/LimitTransport.lean",
+      "sha256": "bb9f38fbaded067f586269bcc2e4a5857760c387797287e2ced603266ec2f14b"
+    },
+    {
+      "bytes": 4938,
+      "path": "formalizzazione/CovariogramCheck/LogKernel.lean",
+      "sha256": "c0b8179aa0d4e91a6f8bd343b01414a4063637b341e13031f1038911bde57efc"
+    },
+    {
+      "bytes": 3262,
+      "path": "formalizzazione/CovariogramCheck/MeasureConclusion.lean",
+      "sha256": "ebda91e1a189740be4fb816c6eeceb7e48bf08b137d5c40c4fc65930ffa90263"
+    },
+    {
+      "bytes": 3466,
+      "path": "formalizzazione/CovariogramCheck/RealParts.lean",
+      "sha256": "d8ebccbc1f02700c91030ccaf34fb5335c9563a6c5815b6be019a6fc641aab76"
+    },
+    {
+      "bytes": 3697,
+      "path": "formalizzazione/CovariogramCheck/WeightedErrors.lean",
+      "sha256": "24fa4797dd56be74500da51cc8b54ebc630a61f9759c22e354623865675dfea9"
+    },
+    {
+      "bytes": 1754,
+      "path": "formalizzazione/CovariogramCheck/ZeroAllocation.lean",
+      "sha256": "5d332d4ea036194f35d57c66a875ccd6e0d42bee4e675d4f08cc789702b8a535"
+    },
+    {
+      "bytes": 9551,
+      "path": "formalizzazione/README.md",
+      "sha256": "e9342311a3a789044e2ccebe76a7d99e4e185978a7a5fca765f606c652b67658"
+    },
+    {
+      "bytes": 1769,
+      "path": "formalizzazione/check.sh",
+      "sha256": "b813833503ae44eeb5f26e9fe52ac9e12395d219487bd26f1a7cfaabe9481e5b"
+    },
+    {
+      "bytes": 2977,
+      "path": "formalizzazione/lake-manifest.json",
+      "sha256": "7659f1b1475ad75023313a93cbc962708d35ac5a5a4186658d4d316a0b68f506"
+    },
+    {
+      "bytes": 217,
+      "path": "formalizzazione/lakefile.toml",
+      "sha256": "c0bbb857293491f742c5be6826a028ce3fa70b14940b28d53fe6c7ea4ebd922a"
+    },
+    {
+      "bytes": 25,
+      "path": "formalizzazione/lean-toolchain",
+      "sha256": "42779d67b81608af8a12aa4328d2ab47ca201925b3b2bd68369587b5340bb434"
+    },
+    {
+      "bytes": 4680,
+      "path": "formalizzazione/verifica/axioms.log",
+      "sha256": "9c4bf886a0cbf727523a9e4cd028ad36202db2b32e4247a59e49de25058269ad"
+    },
+    {
+      "bytes": 42,
+      "path": "formalizzazione/verifica/build.log",
+      "sha256": "74f1ace796e3851d97a4cfe308e9052440aa7aa3f80bfe6c7350d24ecc0479cd"
+    },
+    {
+      "bytes": 429,
+      "path": "formalizzazione/verifica/kernel.log",
+      "sha256": "2b6e6c9b60a8e3f48c5e286c6d8612b9523214f72062ee665dd3730944666c1f"
+    },
+    {
+      "bytes": 1397,
+      "path": "formalizzazione/verifica/sources.sha256",
+      "sha256": "e0a1066cbd6c34005dbdd0f87db0676597c7632c484eba722945306e90993769"
+    },
+    {
+      "bytes": 171,
+      "path": "formalizzazione/verifica/versions.txt",
+      "sha256": "3dfaf620ff9628209df947fffe254c1699581c6ccffad4dd313f02ad94ef8a6e"
+    },
+    {
+      "bytes": 5588,
+      "path": "paper/README.md",
+      "sha256": "c3a636f0a6325b0f753831e70a1f5398fc9e114044c5dd769ccf3b67a6f2f5cf"
+    },
+    {
+      "bytes": 12595,
+      "path": "paper/ai-assisted-covariogram-outline.tex",
+      "sha256": "d0015203022d4847ecaf3df0ad66eb95412b7b7f211f0a834d97bc400d68efbd"
+    },
+    {
+      "bytes": 5439,
+      "path": "paper/computational-diagnostics.tex",
+      "sha256": "4e888bfed099f9a52dab87d615983490c341efd348b8503f062348f9d6fb3304"
+    },
+    {
+      "bytes": 40086,
+      "path": "paper/covariogram-uniqueness-candidate.tex",
+      "sha256": "e69c106b48197d119568174232b743a45c2b4838f1e8e3aa21cc658d1e73705c"
+    },
+    {
+      "bytes": 13,
+      "path": "paper/diagnostics/python-version.txt",
+      "sha256": "fd0fd4290ad100adc37e4a82e45f821faeacbecae70f4d3eba08e85be138c632"
+    },
+    {
+      "bytes": 442,
+      "path": "paper/diagnostics/rational-output.txt",
+      "sha256": "2a511b5ce6bd14fb86949a83908cc5e0e9d50b7fd01d4e5d6a5b05f06aa15989"
+    },
+    {
+      "bytes": 190,
+      "path": "paper/diagnostics/sources.sha256",
+      "sha256": "6767484cdf3f4aa92d19bb7d9c31cc13b618c9c78bfcd632a1c7946eef0dccb5"
+    },
+    {
+      "bytes": 1165,
+      "path": "paper/diagnostics/spectral-output.txt",
+      "sha256": "e5c660d1cee4ee9f0d97cf4d8f65de9e13e9a5bb79261f68ae2972c521806948"
+    },
+    {
+      "bytes": 10374,
+      "path": "paper/lean-verification-supplement.tex",
+      "sha256": "ed677d8b13d5f26a68f63182bb187aa0ee0699c4d5becd4c807906998b626f53"
+    },
+    {
+      "bytes": 70070,
+      "path": "ricerca/rigidita-scambi-covariogramma.tex",
+      "sha256": "c3cc55543fe6b4af1ff1bc28201e9d37c451e89340c3fc119f7594b418de6704"
+    },
+    {
+      "bytes": 4436,
+      "path": "ricerca/verifica_media_zeri.py",
+      "sha256": "2f2a3b77e3fd131c6c73179fc05ba0f56972765689cb64f5e48d8194731e4851"
+    },
+    {
+      "bytes": 3860,
+      "path": "ricerca/verifica_scambi.py",
+      "sha256": "0282a5a2fe645a9bb2096ce17cafdfa6bc48516d4ebcc1437a52dd6e80ed1330"
+    },
+    {
+      "bytes": 17413,
+      "path": "saggi/evoluzione-e-percorso.md",
+      "sha256": "f0b99fb78a95cc9106598c2c069ff09c14ef7654345bf18bca2e2d2690d164aa"
+    }
+  ],
+  "format": "covariogram-publication-snapshot-v1",
+  "notice": "This manifest identifies content. It is not a timestamp certificate, an authorship certificate, or a validation of the mathematical argument.",
+  "repository": "https://github.com/andreacomparini/covariogram-uniqueness-candidate",
+  "tree": "5db4175cab2b1f1127416a4270c1508aabda10d1"
+}

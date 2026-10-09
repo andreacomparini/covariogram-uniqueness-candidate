@@ -1,0 +1,5 @@
+archive: Verification: OK
+request and nonce: Verification: OK
+Altered archive: correctly rejected (message imprint mismatch).
+Public certificate file hashes match the FreeTSA website.
+OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)

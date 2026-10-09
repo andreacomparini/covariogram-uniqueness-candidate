@@ -1,0 +1,23 @@
+{
+  "type": "RFC 3161 timestamp",
+  "provider": "FreeTSA",
+  "endpoint": "https://freetsa.org/tsr",
+  "qualified_eidas": false,
+  "qualified_eidas_notice": "This service has not been established here as an EU qualified trust service. This receipt is presented only as a cryptographic timestamp under the FreeTSA trust anchor.",
+  "timestamp_utc": "2026-10-09T00:05:42+00:00",
+  "timestamp_europe_rome": "2026-10-09T02:05:42+02:00",
+  "covered_commit": "9a401f4a10f2ea685be6681eabaf594c6024602b",
+  "stamped_file": "covariogram-uniqueness-candidate-9a401f4.zip",
+  "sha256": "7950b0928d6bfd0f6a0fc3b04c78fd39acec3963b06bfbe8ffc5e2d8434eecc0",
+  "signature_and_digest_verification": "passed",
+  "request_and_nonce_verification": "passed",
+  "tampered_archive_rejection": "passed",
+  "certificate_downloads": {
+    "tsa": "https://freetsa.org/files/tsa.crt",
+    "ca": "https://freetsa.org/files/cacert.pem"
+  },
+  "certificate_file_sha256": {
+    "freetsa-tsa.crt": "8bfb0305bb64e2571ca507552ef3245cb1c2fee8728e0ff8689225081ea13467",
+    "freetsa-ca.crt": "2151b61137ffa86bf664691ba67e7da0b19f98c758e3d228d5d8ebf27e044438"
+  }
+}
